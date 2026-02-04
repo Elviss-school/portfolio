@@ -6,26 +6,133 @@
   <title>The Library</title>
   <link rel="stylesheet" href="css/styles.css">
   <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
+      overflow-x: hidden;
+    }
+
+    /* Hero section with text at top */
+    .hero {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      overflow: hidden;
+      text-align: center;
+      padding: 60px 30px;
+      position: relative;
+      z-index: 1;
     }
 
-    .landing {
+    .title {
+      font-family: 'IM Fell English', serif;
+      font-size: 4rem;
+      letter-spacing: 0.2em;
+      color: var(--ink);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      font-family: 'Crimson Text', serif;
+      font-style: italic;
+      font-size: 1.4rem;
+      color: var(--ink-faded);
+      letter-spacing: 0.1em;
+      margin-bottom: 50px;
+    }
+
+    .epigraph {
+      max-width: 550px;
+      margin: 0 auto 60px;
+      padding: 35px 40px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .epigraph::before,
+    .epigraph::after {
+      content: '"';
+      font-family: 'IM Fell English', serif;
+      font-size: 4rem;
+      color: var(--border);
+      position: absolute;
+      line-height: 1;
+    }
+
+    .epigraph::before {
+      top: 10px;
+      left: 10px;
+    }
+
+    .epigraph::after {
+      content: '"';
+      bottom: 0;
+      right: 10px;
+    }
+
+    .epigraph p {
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--ink-light);
+      line-height: 1.9;
+    }
+
+    .epigraph cite {
+      display: block;
+      margin-top: 20px;
+      font-size: 0.95rem;
+      color: var(--ink-faded);
+      letter-spacing: 0.08em;
+    }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
       text-align: center;
-      padding: 40px;
+      color: var(--ink-faded);
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      animation: bounce 2s infinite;
+    }
+
+    .scroll-hint span {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+    }
+
+    .scroll-hint::after {
+      content: '↓';
+      font-size: 1.5rem;
+      display: block;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
+
+    /* Atlas section */
+    .atlas-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 30px;
+      position: relative;
       z-index: 1;
     }
 
     .atlas-container {
       position: relative;
-      width: 350px;
-      height: 450px;
-      margin: 0 auto 40px;
       cursor: pointer;
       transition: transform 0.5s ease;
     }
@@ -34,87 +141,69 @@
       transform: scale(1.02);
     }
 
-    .atlas-container:hover .globe {
-      box-shadow:
-        inset -30px -30px 60px rgba(0,0,0,0.3),
-        0 0 60px rgba(107, 68, 35, 0.4),
-        0 0 100px rgba(107, 68, 35, 0.2);
+    .atlas-image {
+      max-width: 500px;
+      width: 100%;
+      height: auto;
+      display: block;
+      /* Remove background - works if image has transparency or solid bg */
+      filter: drop-shadow(0 10px 30px rgba(44, 36, 22, 0.3));
+    }
+
+    /* Clickable globe overlay - positioned over the globe part of the image */
+    .globe-hitbox {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70%;
+      height: 55%;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .globe-hitbox:hover {
+      box-shadow: 0 0 60px rgba(107, 68, 35, 0.4);
+      background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+    }
+
+    .click-hint {
+      position: absolute;
+      bottom: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      color: var(--ink-faded);
+      font-size: 1.1rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
     }
 
     .atlas-container:hover .click-hint {
       opacity: 1;
     }
 
-    /* Atlas figure */
-    .atlas {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 200px;
-      height: 280px;
+    /* Fallback if no image - CSS Atlas */
+    .atlas-fallback {
+      display: none;
+      width: 350px;
+      height: 450px;
+      position: relative;
     }
 
-    /* Atlas body - simplified classical figure */
-    .atlas-body {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 120px;
-      height: 180px;
-      background: linear-gradient(
-        to bottom,
-        #c4b89c 0%,
-        #a89880 50%,
-        #8b7355 100%
-      );
-      clip-path: polygon(
-        30% 0%, 70% 0%,
-        85% 30%, 90% 60%,
-        85% 100%, 15% 100%,
-        10% 60%, 15% 30%
-      );
+    .no-image .atlas-fallback {
+      display: block;
     }
 
-    /* Atlas arms reaching up */
-    .atlas-arms {
-      position: absolute;
-      bottom: 140px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 180px;
-      height: 80px;
+    .no-image .atlas-image {
+      display: none;
     }
 
-    .atlas-arms::before,
-    .atlas-arms::after {
-      content: '';
-      position: absolute;
-      width: 25px;
-      height: 100px;
-      background: linear-gradient(
-        to top,
-        #a89880 0%,
-        #c4b89c 100%
-      );
-      border-radius: 10px;
-    }
-
-    .atlas-arms::before {
-      left: 10px;
-      transform: rotate(-30deg);
-      transform-origin: bottom center;
-    }
-
-    .atlas-arms::after {
-      right: 10px;
-      transform: rotate(30deg);
-      transform-origin: bottom center;
-    }
-
-    /* The spherical library (globe) */
-    .globe {
+    /* Globe for fallback */
+    .fallback-globe {
       position: absolute;
       top: 0;
       left: 50%;
@@ -124,156 +213,136 @@
       border-radius: 50%;
       background:
         radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 50%),
-        linear-gradient(
-          135deg,
-          #d4c4a8 0%,
-          #c4b89c 25%,
-          #a89880 50%,
-          #8b7355 75%,
-          #6b5a47 100%
-        );
+        linear-gradient(135deg, #4a90a4 0%, #2d6a4f 30%, #40916c 60%, #1b4332 100%);
       box-shadow:
         inset -30px -30px 60px rgba(0,0,0,0.3),
         0 0 40px rgba(107, 68, 35, 0.3);
-      transition: box-shadow 0.5s ease;
-      overflow: hidden;
     }
 
-    /* Hexagonal library pattern on globe */
-    .globe::before {
+    .fallback-globe::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%232c2416' fill-opacity='0.15'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      opacity: 0.8;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
       border-radius: 50%;
+      opacity: 0.5;
     }
 
-    /* Small book spines visible on globe */
-    .globe::after {
-      content: '';
+    .fallback-atlas {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 60%;
-      height: 40%;
-      background: repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent 3px,
-        rgba(44, 36, 22, 0.1) 3px,
-        rgba(44, 36, 22, 0.1) 6px
-      );
-    }
-
-    .click-hint {
-      position: absolute;
-      bottom: -60px;
+      bottom: 0;
       left: 50%;
       transform: translateX(-50%);
-      font-family: 'IM Fell English', serif;
-      font-style: italic;
-      color: var(--ink-faded);
-      font-size: 1rem;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      white-space: nowrap;
+      width: 200px;
+      height: 280px;
     }
 
-    .title {
-      font-family: 'IM Fell English', serif;
-      font-size: 3.5rem;
-      letter-spacing: 0.15em;
-      color: var(--ink);
-      margin-bottom: 15px;
-      text-transform: uppercase;
+    .fallback-body {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 180px;
+      background: linear-gradient(to bottom, #d4c4a8 0%, #c4b89c 50%, #a89880 100%);
+      clip-path: polygon(30% 0%, 70% 0%, 85% 30%, 90% 60%, 85% 100%, 15% 100%, 10% 60%, 15% 30%);
     }
 
-    .subtitle {
-      font-family: 'Crimson Text', serif;
-      font-style: italic;
-      font-size: 1.3rem;
-      color: var(--ink-faded);
-      letter-spacing: 0.1em;
+    .fallback-arms {
+      position: absolute;
+      bottom: 140px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 180px;
+      height: 80px;
     }
 
-    .epigraph {
-      max-width: 500px;
-      margin: 40px auto 0;
-      padding: 30px;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
+    .fallback-arms::before,
+    .fallback-arms::after {
+      content: '';
+      position: absolute;
+      width: 25px;
+      height: 100px;
+      background: linear-gradient(to top, #c4b89c 0%, #d4c4a8 100%);
+      border-radius: 10px;
     }
 
-    .epigraph p {
-      font-style: italic;
-      font-size: 1.1rem;
-      color: var(--ink-light);
-      line-height: 1.8;
+    .fallback-arms::before {
+      left: 10px;
+      transform: rotate(-30deg);
+      transform-origin: bottom center;
     }
 
-    .epigraph cite {
-      display: block;
-      margin-top: 15px;
-      font-size: 0.95rem;
-      color: var(--ink-faded);
-      letter-spacing: 0.05em;
+    .fallback-arms::after {
+      right: 10px;
+      transform: rotate(30deg);
+      transform-origin: bottom center;
     }
 
-    /* Page turn animation */
-    @keyframes pageTurn {
-      0% { transform: translateX(-50%) rotateY(0deg); }
-      100% { transform: translateX(-50%) rotateY(180deg); }
-    }
-
-    .atlas-container:active .globe {
-      animation: pageTurn 0.5s ease-out;
-    }
-
-    @media (max-width: 500px) {
-      .atlas-container {
-        width: 280px;
-        height: 380px;
-      }
-
-      .globe {
-        width: 180px;
-        height: 180px;
-      }
-
-      .atlas-body {
-        width: 100px;
-        height: 150px;
-      }
-
+    @media (max-width: 600px) {
       .title {
         font-size: 2.5rem;
+        letter-spacing: 0.1em;
+      }
+
+      .subtitle {
+        font-size: 1.1rem;
+      }
+
+      .atlas-image {
+        max-width: 320px;
+      }
+
+      .epigraph {
+        padding: 25px 20px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="landing">
-    <a href="library.html" class="atlas-container" title="Enter the Library">
-      <div class="globe"></div>
-      <div class="atlas">
-        <div class="atlas-arms"></div>
-        <div class="atlas-body"></div>
-      </div>
-      <span class="click-hint">Click to enter the Library</span>
-    </a>
-
+  <!-- Hero Section with Text -->
+  <section class="hero">
     <h1 class="title">The Library</h1>
     <p class="subtitle">A Collection of Works & Endeavors</p>
 
     <div class="epigraph">
-      <p>"The universe (which others call the Library) is composed of an indefinite, perhaps infinite, number of hexagonal galleries..."</p>
+      <p>The universe (which others call the Library) is composed of an indefinite, perhaps infinite, number of hexagonal galleries...</p>
       <cite>— Jorge Luis Borges, "The Library of Babel"</cite>
     </div>
-  </div>
+
+    <div class="scroll-hint">
+      <span>Scroll to enter</span>
+    </div>
+  </section>
+
+  <!-- Atlas Section -->
+  <section class="atlas-section" id="atlas">
+    <a href="library.html" class="atlas-container" title="Enter the Library">
+      <!--
+        Save your Atlas image as: images/atlas.png
+        For best results, use an image with transparent background
+        or the cream/beige background from your reference image
+      -->
+      <img src="images/atlas.png" alt="Atlas holding the Library" class="atlas-image"
+           onerror="this.parentElement.classList.add('no-image')">
+
+      <!-- Fallback CSS Atlas if image doesn't load -->
+      <div class="atlas-fallback">
+        <div class="fallback-globe"></div>
+        <div class="fallback-atlas">
+          <div class="fallback-arms"></div>
+          <div class="fallback-body"></div>
+        </div>
+      </div>
+
+      <!-- Invisible clickable area over the globe -->
+      <div class="globe-hitbox"></div>
+
+      <span class="click-hint">Click the globe to enter</span>
+    </a>
+  </section>
 </body>
 </html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Name - Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+      color: #e6edf3;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 4px solid #30363d;
+      margin-bottom: 20px;
+      background: #21262d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .tagline {
+      color: #8b949e;
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .social-links a {
+      color: #58a6ff;
+      text-decoration: none;
+      padding: 8px 16px;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .social-links a:hover {
+      background: #21262d;
+      border-color: #58a6ff;
+    }
+
+    section {
+      margin-bottom: 50px;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #30363d;
+    }
+
+    .about p {
+      color: #8b949e;
+      font-size: 1.1rem;
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .skill {
+      background: #21262d;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      border: 1px solid #30363d;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .project-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 24px;
+      transition: all 0.2s;
+    }
+
+    .project-card:hover {
+      border-color: #58a6ff;
+      transform: translateY(-2px);
+    }
+
+    .project-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .project-card p {
+      color: #8b949e;
+      font-size: 0.95rem;
+      margin-bottom: 15px;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .project-tags span {
+      background: #0d1117;
+      color: #58a6ff;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+    }
+
+    footer {
+      text-align: center;
+      padding-top: 40px;
+      border-top: 1px solid #30363d;
+      color: #8b949e;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .social-links {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="avatar">:)</div>
+      <h1>Your Name</h1>
+      <p class="tagline">Full Stack Developer | Open Source Enthusiast</p>
+      <div class="social-links">
+        <a href="https://github.com/yourusername" target="_blank">GitHub</a>
+        <a href="https://linkedin.com/in/yourusername" target="_blank">LinkedIn</a>
+        <a href="mailto:your@email.com">Email</a>
+      </div>
+    </header>
+
+    <section class="about">
+      <h2>About Me</h2>
+      <p>
+        Hello! I'm a passionate developer who loves building things for the web.
+        I enjoy working on open source projects and learning new technologies.
+        When I'm not coding, you can find me exploring new places or playing video games.
+      </p>
+    </section>
+
+    <section>
+      <h2>Skills</h2>
+      <div class="skills">
+        <span class="skill">JavaScript</span>
+        <span class="skill">TypeScript</span>
+        <span class="skill">React</span>
+        <span class="skill">Node.js</span>
+        <span class="skill">Python</span>
+        <span class="skill">Git</span>
+        <span class="skill">HTML/CSS</span>
+        <span class="skill">SQL</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Projects</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <h3>Project One</h3>
+          <p>A cool project that does something amazing. Built with modern technologies and best practices.</p>
+          <div class="project-tags">
+            <span>React</span>
+            <span>Node.js</span>
+            <span>MongoDB</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <h3>Project Two</h3>
+          <p>Another awesome project showcasing different skills and technologies.</p>
+          <div class="project-tags">
+            <span>Python</span>
+            <span>FastAPI</span>
+            <span>PostgreSQL</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <h3>Project Three</h3>
+          <p>A fun side project that solves a real-world problem in a creative way.</p>
+          <div class="project-tags">
+            <span>TypeScript</span>
+            <span>Next.js</span>
+            <span>Tailwind</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2025 Your Name. All rights reserved.</p>
+    </footer>
+  </div>
+</body>
+</html>

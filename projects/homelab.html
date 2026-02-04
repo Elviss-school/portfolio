@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volume I: Homelab - The Library</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .project-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 80px 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Book cover header */
+    .book-cover {
+      background: linear-gradient(135deg, #722f37 0%, #5c252c 50%, #461c22 100%);
+      padding: 60px 40px;
+      text-align: center;
+      margin-bottom: 50px;
+      position: relative;
+      box-shadow:
+        5px 5px 20px rgba(44, 36, 22, 0.4),
+        inset -5px 0 20px rgba(0,0,0,0.2);
+    }
+
+    .book-cover::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 30px;
+      background: linear-gradient(
+        to right,
+        rgba(0,0,0,0.4) 0%,
+        rgba(0,0,0,0.1) 50%,
+        transparent 100%
+      );
+    }
+
+    .book-cover::after {
+      content: '';
+      position: absolute;
+      left: 12px;
+      top: 20px;
+      bottom: 20px;
+      width: 3px;
+      background: rgba(212, 175, 55, 0.3);
+      box-shadow: 5px 0 0 rgba(212, 175, 55, 0.15);
+    }
+
+    .book-cover .volume-number {
+      font-family: 'IM Fell English', serif;
+      font-size: 1rem;
+      color: rgba(212, 175, 55, 0.7);
+      letter-spacing: 0.3em;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+    }
+
+    .book-cover h1 {
+      color: #d4af37;
+      font-size: 3rem;
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .book-cover .subtitle {
+      color: #c4a87c;
+      font-style: italic;
+      font-size: 1.2rem;
+    }
+
+    .project-tags {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .project-tags .tag {
+      background: rgba(0,0,0,0.3);
+      border-color: rgba(212, 175, 55, 0.3);
+    }
+
+    /* Content sections */
+    .chapter {
+      margin-bottom: 50px;
+    }
+
+    .chapter-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .chapter-number {
+      font-family: 'IM Fell English', serif;
+      font-size: 2.5rem;
+      color: var(--border);
+      line-height: 1;
+    }
+
+    .chapter h2 {
+      margin-bottom: 0;
+      border-bottom: none;
+    }
+
+    .chapter p {
+      margin-bottom: 15px;
+    }
+
+    .chapter ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .chapter li {
+      position: relative;
+      padding-left: 25px;
+      margin-bottom: 12px;
+      color: var(--ink-light);
+    }
+
+    .chapter li::before {
+      content: '~';
+      position: absolute;
+      left: 0;
+      color: var(--ink-faded);
+    }
+
+    /* Tech stack display */
+    .tech-stack {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .tech-item {
+      background: var(--parchment-dark);
+      border: 1px solid var(--border);
+      padding: 15px 20px;
+      transition: all 0.3s;
+    }
+
+    .tech-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px var(--shadow);
+    }
+
+    .tech-item h4 {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.1rem;
+      color: var(--ink);
+      margin-bottom: 5px;
+    }
+
+    .tech-item p {
+      font-size: 0.9rem;
+      color: var(--ink-faded);
+      margin: 0;
+    }
+
+    /* Links section */
+    .project-links {
+      display: flex;
+      gap: 20px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .project-links .btn {
+      flex: 1;
+      min-width: 200px;
+      text-align: center;
+    }
+
+    /* Gallery placeholder */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .gallery-item {
+      aspect-ratio: 16/10;
+      background: var(--parchment-dark);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-faded);
+      font-style: italic;
+    }
+
+    /* Navigation */
+    .project-nav {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 40px;
+      margin-top: 50px;
+      border-top: 1px solid var(--border);
+    }
+
+    .project-nav a {
+      font-family: 'IM Fell English', serif;
+    }
+
+    .project-nav .next::after {
+      content: ' →';
+    }
+
+    .project-nav .prev::before {
+      content: '← ';
+    }
+
+    @media (max-width: 600px) {
+      .book-cover {
+        padding: 40px 30px;
+      }
+
+      .book-cover h1 {
+        font-size: 2rem;
+      }
+
+      .project-links {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="../library.html" class="nav-back">Return to Library</a>
+
+  <div class="project-container container">
+    <!-- Book Cover -->
+    <header class="book-cover">
+      <p class="volume-number">Volume I</p>
+      <h1>Homelab</h1>
+      <p class="subtitle">Infrastructure Experiments & Self-Hosted Services</p>
+      <div class="project-tags">
+        <span class="tag">Docker</span>
+        <span class="tag">Linux</span>
+        <span class="tag">Networking</span>
+        <span class="tag">Self-Hosted</span>
+      </div>
+    </header>
+
+    <!-- Chapter 1: Overview -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-number">I</span>
+        <h2>Overview</h2>
+      </div>
+      <p>
+        This volume documents the construction and maintenance of a personal homelab
+        environment. What began as a simple curiosity evolved into a comprehensive
+        infrastructure serving various self-hosted services and providing a sandbox
+        for experimentation with enterprise technologies.
+      </p>
+      <p>
+        The homelab serves as both a practical utility and an educational endeavor,
+        allowing hands-on experience with systems that would otherwise require
+        expensive enterprise environments to explore.
+      </p>
+    </section>
+
+    <!-- Chapter 2: Architecture -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-number">II</span>
+        <h2>Architecture</h2>
+      </div>
+      <p>The current infrastructure consists of:</p>
+      <ul>
+        <li>Proxmox VE hypervisor for virtualization</li>
+        <li>Docker Swarm / Kubernetes for container orchestration</li>
+        <li>TrueNAS for network-attached storage</li>
+        <li>pfSense / OPNsense for network security</li>
+        <li>Various self-hosted applications and services</li>
+      </ul>
+    </section>
+
+    <!-- Chapter 3: Technology Stack -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-number">III</span>
+        <h2>Technology Stack</h2>
+      </div>
+      <div class="tech-stack">
+        <div class="tech-item">
+          <h4>Virtualization</h4>
+          <p>Proxmox VE, QEMU/KVM</p>
+        </div>
+        <div class="tech-item">
+          <h4>Containers</h4>
+          <p>Docker, Kubernetes</p>
+        </div>
+        <div class="tech-item">
+          <h4>Storage</h4>
+          <p>TrueNAS, ZFS</p>
+        </div>
+        <div class="tech-item">
+          <h4>Networking</h4>
+          <p>VLANs, Reverse Proxy</p>
+        </div>
+        <div class="tech-item">
+          <h4>Monitoring</h4>
+          <p>Grafana, Prometheus</p>
+        </div>
+        <div class="tech-item">
+          <h4>Automation</h4>
+          <p>Ansible, Terraform</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chapter 4: Services -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-number">IV</span>
+        <h2>Hosted Services</h2>
+      </div>
+      <ul>
+        <li>Media server (Plex/Jellyfin)</li>
+        <li>Password manager (Vaultwarden)</li>
+        <li>File synchronization (Nextcloud)</li>
+        <li>Home automation (Home Assistant)</li>
+        <li>Network-wide ad blocking (Pi-hole/AdGuard)</li>
+        <li>Git repository hosting (Gitea)</li>
+        <li>Documentation wiki</li>
+      </ul>
+    </section>
+
+    <!-- Chapter 5: Gallery -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-number">V</span>
+        <h2>Gallery</h2>
+      </div>
+      <div class="gallery">
+        <div class="gallery-item">[ Network Diagram ]</div>
+        <div class="gallery-item">[ Server Rack ]</div>
+        <div class="gallery-item">[ Dashboard ]</div>
+      </div>
+    </section>
+
+    <!-- Links -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-number">VI</span>
+        <h2>Resources</h2>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/yourusername/homelab" class="btn" target="_blank">View Repository</a>
+        <a href="#" class="btn">Documentation</a>
+      </div>
+    </section>
+
+    <!-- Navigation -->
+    <nav class="project-nav">
+      <a href="../library.html" class="prev">Back to Library</a>
+      <a href="placeholder.html" class="next">Volume II</a>
+    </nav>
+  </div>
+</body>
+</html>

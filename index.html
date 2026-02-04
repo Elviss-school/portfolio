@@ -3,411 +3,277 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Name - Portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <title>The Library</title>
+  <link rel="stylesheet" href="css/styles.css">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      background: #0a0806;
-      color: #c4b59d;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       min-height: 100vh;
-      line-height: 1.8;
-      position: relative;
+      overflow: hidden;
     }
 
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background:
-        radial-gradient(ellipse at center, transparent 0%, #0a0806 70%),
-        repeating-linear-gradient(
-          0deg,
-          transparent,
-          transparent 2px,
-          rgba(139, 109, 70, 0.03) 2px,
-          rgba(139, 109, 70, 0.03) 4px
-        );
-      pointer-events: none;
+    .landing {
+      text-align: center;
+      padding: 40px;
       z-index: 1;
     }
 
-    /* Hexagonal pattern overlay */
-    body::after {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%238b6d46' fill-opacity='0.04'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.5;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 80px 30px;
+    .atlas-container {
       position: relative;
-      z-index: 2;
+      width: 350px;
+      height: 450px;
+      margin: 0 auto 40px;
+      cursor: pointer;
+      transition: transform 0.5s ease;
     }
 
-    header {
-      text-align: center;
-      margin-bottom: 80px;
-      padding-bottom: 40px;
-      border-bottom: 1px solid rgba(139, 109, 70, 0.3);
+    .atlas-container:hover {
+      transform: scale(1.02);
     }
 
-    .emblem {
+    .atlas-container:hover .globe {
+      box-shadow:
+        inset -30px -30px 60px rgba(0,0,0,0.3),
+        0 0 60px rgba(107, 68, 35, 0.4),
+        0 0 100px rgba(107, 68, 35, 0.2);
+    }
+
+    .atlas-container:hover .click-hint {
+      opacity: 1;
+    }
+
+    /* Atlas figure */
+    .atlas {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 280px;
+    }
+
+    /* Atlas body - simplified classical figure */
+    .atlas-body {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
       width: 120px;
-      height: 120px;
-      margin: 0 auto 30px;
-      position: relative;
+      height: 180px;
+      background: linear-gradient(
+        to bottom,
+        #c4b89c 0%,
+        #a89880 50%,
+        #8b7355 100%
+      );
+      clip-path: polygon(
+        30% 0%, 70% 0%,
+        85% 30%, 90% 60%,
+        85% 100%, 15% 100%,
+        10% 60%, 15% 30%
+      );
     }
 
-    .emblem::before {
+    /* Atlas arms reaching up */
+    .atlas-arms {
+      position: absolute;
+      bottom: 140px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 180px;
+      height: 80px;
+    }
+
+    .atlas-arms::before,
+    .atlas-arms::after {
+      content: '';
+      position: absolute;
+      width: 25px;
+      height: 100px;
+      background: linear-gradient(
+        to top,
+        #a89880 0%,
+        #c4b89c 100%
+      );
+      border-radius: 10px;
+    }
+
+    .atlas-arms::before {
+      left: 10px;
+      transform: rotate(-30deg);
+      transform-origin: bottom center;
+    }
+
+    .atlas-arms::after {
+      right: 10px;
+      transform: rotate(30deg);
+      transform-origin: bottom center;
+    }
+
+    /* The spherical library (globe) */
+    .globe {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background:
+        radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 50%),
+        linear-gradient(
+          135deg,
+          #d4c4a8 0%,
+          #c4b89c 25%,
+          #a89880 50%,
+          #8b7355 75%,
+          #6b5a47 100%
+        );
+      box-shadow:
+        inset -30px -30px 60px rgba(0,0,0,0.3),
+        0 0 40px rgba(107, 68, 35, 0.3);
+      transition: box-shadow 0.5s ease;
+      overflow: hidden;
+    }
+
+    /* Hexagonal library pattern on globe */
+    .globe::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      border: 2px solid #8b6d46;
-      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%232c2416' fill-opacity='0.15'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.8;
+      border-radius: 50%;
     }
 
-    .emblem::after {
-      content: 'I';
+    /* Small book spines visible on globe */
+    .globe::after {
+      content: '';
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-family: 'IM Fell English', serif;
-      font-size: 3rem;
-      color: #8b6d46;
+      width: 60%;
+      height: 40%;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 3px,
+        rgba(44, 36, 22, 0.1) 3px,
+        rgba(44, 36, 22, 0.1) 6px
+      );
     }
 
-    h1 {
+    .click-hint {
+      position: absolute;
+      bottom: -60px;
+      left: 50%;
+      transform: translateX(-50%);
       font-family: 'IM Fell English', serif;
-      font-size: 3rem;
-      font-weight: 400;
+      font-style: italic;
+      color: var(--ink-faded);
+      font-size: 1rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .title {
+      font-family: 'IM Fell English', serif;
+      font-size: 3.5rem;
       letter-spacing: 0.15em;
+      color: var(--ink);
       margin-bottom: 15px;
-      color: #d4c4a8;
       text-transform: uppercase;
     }
 
-    .tagline {
-      font-style: italic;
-      color: #8b7355;
-      font-size: 1.3rem;
-      margin-bottom: 30px;
-      letter-spacing: 0.05em;
-    }
-
-    .social-links {
-      display: flex;
-      gap: 30px;
-      justify-content: center;
-    }
-
-    .social-links a {
-      color: #8b6d46;
-      text-decoration: none;
-      font-family: 'IM Fell English', serif;
-      font-size: 1.1rem;
-      letter-spacing: 0.1em;
-      transition: all 0.3s;
-      position: relative;
-    }
-
-    .social-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: #8b6d46;
-      transition: width 0.3s;
-    }
-
-    .social-links a:hover {
-      color: #d4c4a8;
-    }
-
-    .social-links a:hover::after {
-      width: 100%;
-    }
-
-    section {
-      margin-bottom: 70px;
-    }
-
-    h2 {
-      font-family: 'IM Fell English', serif;
-      font-size: 1.8rem;
-      font-weight: 400;
-      margin-bottom: 25px;
-      color: #d4c4a8;
-      letter-spacing: 0.1em;
-      text-align: center;
-      position: relative;
-    }
-
-    h2::before,
-    h2::after {
-      content: '~';
-      margin: 0 15px;
-      color: #8b6d46;
-    }
-
-    .about p {
-      color: #a89880;
-      font-size: 1.2rem;
-      text-align: center;
-      max-width: 600px;
-      margin: 0 auto;
-      font-style: italic;
-    }
-
-    .skills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      justify-content: center;
-    }
-
-    .skill {
-      background: transparent;
-      padding: 8px 20px;
-      font-size: 1rem;
-      border: 1px solid rgba(139, 109, 70, 0.4);
-      color: #a89880;
-      font-family: 'IM Fell English', serif;
-      letter-spacing: 0.05em;
-      transition: all 0.3s;
-    }
-
-    .skill:hover {
-      border-color: #8b6d46;
-      color: #d4c4a8;
-      background: rgba(139, 109, 70, 0.1);
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
-    }
-
-    .project-card {
-      background: rgba(10, 8, 6, 0.8);
-      border: 1px solid rgba(139, 109, 70, 0.3);
-      padding: 30px;
-      transition: all 0.3s;
-      position: relative;
-    }
-
-    .project-card::before {
-      content: '';
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      right: 10px;
-      bottom: 10px;
-      border: 1px solid rgba(139, 109, 70, 0.15);
-      pointer-events: none;
-    }
-
-    .project-card:hover {
-      border-color: #8b6d46;
-      box-shadow: 0 0 30px rgba(139, 109, 70, 0.1);
-    }
-
-    .project-card h3 {
-      font-family: 'IM Fell English', serif;
-      font-size: 1.4rem;
-      font-weight: 400;
-      margin-bottom: 15px;
-      color: #d4c4a8;
-      letter-spacing: 0.05em;
-    }
-
-    .project-card p {
-      color: #8b7355;
-      font-size: 1rem;
-      margin-bottom: 20px;
-      font-style: italic;
-    }
-
-    .project-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .project-tags span {
-      background: transparent;
-      color: #8b6d46;
-      padding: 3px 12px;
-      font-size: 0.85rem;
-      font-family: 'IM Fell English', serif;
-      border: 1px solid rgba(139, 109, 70, 0.3);
-    }
-
-    .quote {
-      text-align: center;
-      padding: 40px 20px;
-      margin-bottom: 60px;
-      border-top: 1px solid rgba(139, 109, 70, 0.2);
-      border-bottom: 1px solid rgba(139, 109, 70, 0.2);
-    }
-
-    .quote p {
+    .subtitle {
+      font-family: 'Crimson Text', serif;
       font-style: italic;
       font-size: 1.3rem;
-      color: #8b7355;
+      color: var(--ink-faded);
+      letter-spacing: 0.1em;
+    }
+
+    .epigraph {
       max-width: 500px;
-      margin: 0 auto;
+      margin: 40px auto 0;
+      padding: 30px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
     }
 
-    .quote cite {
+    .epigraph p {
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--ink-light);
+      line-height: 1.8;
+    }
+
+    .epigraph cite {
       display: block;
       margin-top: 15px;
       font-size: 0.95rem;
-      color: #6b5a47;
-      letter-spacing: 0.1em;
+      color: var(--ink-faded);
+      letter-spacing: 0.05em;
     }
 
-    footer {
-      text-align: center;
-      padding-top: 50px;
-      border-top: 1px solid rgba(139, 109, 70, 0.2);
-      color: #6b5a47;
-      font-family: 'IM Fell English', serif;
-      letter-spacing: 0.1em;
+    /* Page turn animation */
+    @keyframes pageTurn {
+      0% { transform: translateX(-50%) rotateY(0deg); }
+      100% { transform: translateX(-50%) rotateY(180deg); }
     }
 
-    /* Flickering candle light effect */
-    @keyframes flicker {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.92; }
-      75% { opacity: 0.97; }
+    .atlas-container:active .globe {
+      animation: pageTurn 0.5s ease-out;
     }
 
-    .container {
-      animation: flicker 4s infinite;
-    }
-
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 2rem;
-        letter-spacing: 0.1em;
+    @media (max-width: 500px) {
+      .atlas-container {
+        width: 280px;
+        height: 380px;
       }
 
-      .social-links {
-        flex-direction: column;
-        gap: 15px;
+      .globe {
+        width: 180px;
+        height: 180px;
       }
 
-      h2::before,
-      h2::after {
-        display: none;
+      .atlas-body {
+        width: 100px;
+        height: 150px;
+      }
+
+      .title {
+        font-size: 2.5rem;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="emblem"></div>
-      <h1>Your Name</h1>
-      <p class="tagline">Wanderer of Infinite Repositories</p>
-      <div class="social-links">
-        <a href="https://github.com/yourusername" target="_blank">GitHub</a>
-        <a href="https://linkedin.com/in/yourusername" target="_blank">LinkedIn</a>
-        <a href="mailto:your@email.com">Correspondence</a>
+  <div class="landing">
+    <a href="library.html" class="atlas-container" title="Enter the Library">
+      <div class="globe"></div>
+      <div class="atlas">
+        <div class="atlas-arms"></div>
+        <div class="atlas-body"></div>
       </div>
-    </header>
+      <span class="click-hint">Click to enter the Library</span>
+    </a>
 
-    <div class="quote">
+    <h1 class="title">The Library</h1>
+    <p class="subtitle">A Collection of Works & Endeavors</p>
+
+    <div class="epigraph">
       <p>"The universe (which others call the Library) is composed of an indefinite, perhaps infinite, number of hexagonal galleries..."</p>
-      <cite>~ Jorge Luis Borges</cite>
+      <cite>— Jorge Luis Borges, "The Library of Babel"</cite>
     </div>
-
-    <section class="about">
-      <h2>The Librarian</h2>
-      <p>
-        A seeker of patterns in the endless shelves of code.
-        I traverse the hexagonal chambers of software,
-        cataloguing solutions and crafting new volumes
-        for those who wander these digital galleries.
-      </p>
-    </section>
-
-    <section>
-      <h2>Disciplines</h2>
-      <div class="skills">
-        <span class="skill">JavaScript</span>
-        <span class="skill">TypeScript</span>
-        <span class="skill">React</span>
-        <span class="skill">Node.js</span>
-        <span class="skill">Python</span>
-        <span class="skill">Git</span>
-        <span class="skill">HTML/CSS</span>
-        <span class="skill">SQL</span>
-      </div>
-    </section>
-
-    <section>
-      <h2>Volumes</h2>
-      <div class="projects-grid">
-        <div class="project-card">
-          <h3>Volume I</h3>
-          <p>A manuscript of interconnected components, weaving together the threads of user experience.</p>
-          <div class="project-tags">
-            <span>React</span>
-            <span>Node.js</span>
-            <span>MongoDB</span>
-          </div>
-        </div>
-        <div class="project-card">
-          <h3>Volume II</h3>
-          <p>An algorithmic treatise on the nature of data and its eternal transformations.</p>
-          <div class="project-tags">
-            <span>Python</span>
-            <span>FastAPI</span>
-            <span>PostgreSQL</span>
-          </div>
-        </div>
-        <div class="project-card">
-          <h3>Volume III</h3>
-          <p>A collection of arcane utilities, each solving mysteries of the digital realm.</p>
-          <div class="project-tags">
-            <span>TypeScript</span>
-            <span>Next.js</span>
-            <span>Tailwind</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <footer>
-      <p>~ Catalogued in the Year MMXXV ~</p>
-    </footer>
   </div>
 </body>
 </html>

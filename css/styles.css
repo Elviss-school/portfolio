@@ -1,0 +1,313 @@
+/* Library of Babel Portfolio - Shared Styles */
+
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Special+Elite&display=swap');
+
+:root {
+  --parchment: #f4f1ea;
+  --parchment-dark: #e8e4d9;
+  --ink: #2c2416;
+  --ink-light: #5c4a32;
+  --ink-faded: #8b7355;
+  --accent: #6b4423;
+  --border: #c4b89c;
+  --shadow: rgba(44, 36, 22, 0.15);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Crimson Text', Georgia, serif;
+  background: var(--parchment);
+  color: var(--ink);
+  min-height: 100vh;
+  line-height: 1.7;
+  position: relative;
+}
+
+/* Paper texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Aged paper spots */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(139, 115, 85, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(139, 115, 85, 0.06) 0%, transparent 40%),
+    radial-gradient(ellipse at 60% 20%, rgba(139, 115, 85, 0.05) 0%, transparent 30%);
+  pointer-events: none;
+  z-index: 999;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Typography */
+h1, h2, h3 {
+  font-family: 'IM Fell English', serif;
+  font-weight: 400;
+}
+
+h1 {
+  font-size: 2.8rem;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+}
+
+h2 {
+  font-size: 1.8rem;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  margin-bottom: 1.5rem;
+}
+
+h3 {
+  font-size: 1.4rem;
+  color: var(--ink-light);
+}
+
+p {
+  color: var(--ink-light);
+  font-size: 1.1rem;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+a:hover {
+  color: var(--ink);
+}
+
+/* Decorative elements */
+.ornament {
+  text-align: center;
+  color: var(--ink-faded);
+  font-size: 1.5rem;
+  letter-spacing: 0.5em;
+  margin: 2rem 0;
+}
+
+.divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--border) 20%,
+    var(--border) 80%,
+    transparent
+  );
+  margin: 3rem 0;
+}
+
+/* Book styling for projects */
+.book {
+  background: linear-gradient(135deg, #8b4513 0%, #654321 50%, #4a3520 100%);
+  border-radius: 3px 8px 8px 3px;
+  padding: 25px 30px 25px 35px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow:
+    2px 2px 8px var(--shadow),
+    inset -3px 0 10px rgba(0,0,0,0.2);
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.book::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  background: linear-gradient(
+    to right,
+    rgba(0,0,0,0.3) 0%,
+    rgba(0,0,0,0.1) 30%,
+    transparent 100%
+  );
+  border-radius: 3px 0 0 3px;
+}
+
+/* Book spine lines */
+.book::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 15px;
+  bottom: 15px;
+  width: 2px;
+  background: rgba(212, 175, 55, 0.4);
+  box-shadow: 4px 0 0 rgba(212, 175, 55, 0.2);
+}
+
+.book:hover {
+  transform: translateY(-5px) rotate(-1deg);
+  box-shadow:
+    5px 8px 15px var(--shadow),
+    inset -3px 0 10px rgba(0,0,0,0.2);
+}
+
+.book h3 {
+  color: #d4af37;
+  font-family: 'IM Fell English', serif;
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.book p {
+  color: #c4a87c;
+  font-size: 0.95rem;
+  font-style: italic;
+}
+
+.book .book-number {
+  position: absolute;
+  bottom: 15px;
+  right: 20px;
+  font-family: 'IM Fell English', serif;
+  color: rgba(212, 175, 55, 0.5);
+  font-size: 2rem;
+}
+
+/* Different book colors */
+.book.burgundy {
+  background: linear-gradient(135deg, #722f37 0%, #5c252c 50%, #461c22 100%);
+}
+
+.book.navy {
+  background: linear-gradient(135deg, #1e3a5f 0%, #152a45 50%, #0f1f33 100%);
+}
+
+.book.green {
+  background: linear-gradient(135deg, #2d4a3e 0%, #1f362c 50%, #15261f 100%);
+}
+
+.book.purple {
+  background: linear-gradient(135deg, #4a3060 0%, #362248 50%, #261835 100%);
+}
+
+/* Certificate styling */
+.certificate {
+  background: var(--parchment-dark);
+  border: 2px solid var(--border);
+  padding: 20px 25px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.certificate::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border: 1px solid var(--border);
+  pointer-events: none;
+}
+
+.certificate:hover {
+  box-shadow: 0 5px 20px var(--shadow);
+  transform: translateY(-3px);
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  font-family: 'IM Fell English', serif;
+  font-size: 1.1rem;
+  padding: 12px 30px;
+  border: 2px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+}
+
+.btn:hover {
+  background: var(--ink);
+  color: var(--parchment);
+}
+
+/* Navigation */
+.nav-back {
+  position: fixed;
+  top: 30px;
+  left: 30px;
+  font-family: 'IM Fell English', serif;
+  font-size: 1rem;
+  color: var(--ink-faded);
+  z-index: 100;
+}
+
+.nav-back:hover {
+  color: var(--ink);
+}
+
+.nav-back::before {
+  content: '← ';
+}
+
+/* Tags */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.tag {
+  font-family: 'Special Elite', monospace;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.1);
+  color: #c4a87c;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .book {
+    min-height: 150px;
+    padding: 20px 25px 20px 30px;
+  }
+}

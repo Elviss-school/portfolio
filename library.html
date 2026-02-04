@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Library - Collections</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .library-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 60px 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header / Profile Section */
+    .library-header {
+      text-align: center;
+      padding-bottom: 50px;
+      margin-bottom: 50px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .librarian-sigil {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 25px;
+      position: relative;
+      border: 2px solid var(--ink-faded);
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--parchment-dark);
+    }
+
+    .librarian-sigil span {
+      font-family: 'IM Fell English', serif;
+      font-size: 2.5rem;
+      color: var(--ink-light);
+    }
+
+    .library-header h1 {
+      margin-bottom: 10px;
+    }
+
+    .library-header .role {
+      font-style: italic;
+      color: var(--ink-faded);
+      font-size: 1.2rem;
+      margin-bottom: 25px;
+    }
+
+    .bio {
+      max-width: 600px;
+      margin: 0 auto 30px;
+      font-size: 1.1rem;
+      color: var(--ink-light);
+      line-height: 1.8;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .social-links a {
+      font-family: 'IM Fell English', serif;
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      position: relative;
+    }
+
+    .social-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+
+    .social-links a:hover::after {
+      width: 100%;
+    }
+
+    /* Section titles */
+    .section-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-header h2 {
+      display: inline-block;
+      position: relative;
+      padding: 0 30px;
+    }
+
+    .section-header h2::before,
+    .section-header h2::after {
+      content: '§';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--ink-faded);
+      font-size: 1rem;
+    }
+
+    .section-header h2::before {
+      left: 0;
+    }
+
+    .section-header h2::after {
+      right: 0;
+    }
+
+    /* Bookshelf for projects */
+    .bookshelf {
+      margin-bottom: 60px;
+    }
+
+    .shelf {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      margin-bottom: 20px;
+    }
+
+    .shelf-edge {
+      height: 15px;
+      background: linear-gradient(
+        to bottom,
+        #8b7355 0%,
+        #6b5a47 50%,
+        #5c4a3a 100%
+      );
+      border-radius: 0 0 3px 3px;
+      box-shadow: 0 4px 8px rgba(44, 36, 22, 0.3);
+      margin-bottom: 40px;
+    }
+
+    .book a {
+      display: block;
+      text-decoration: none;
+      height: 100%;
+    }
+
+    /* Certificate shelf */
+    .certificates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .certificate h3 {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+
+    .certificate .issuer {
+      font-style: italic;
+      color: var(--ink-faded);
+      font-size: 0.95rem;
+      margin-bottom: 5px;
+    }
+
+    .certificate .date {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.8rem;
+      color: var(--ink-faded);
+    }
+
+    /* Footer */
+    .library-footer {
+      text-align: center;
+      padding-top: 50px;
+      margin-top: 50px;
+      border-top: 1px solid var(--border);
+    }
+
+    .library-footer p {
+      font-family: 'IM Fell English', serif;
+      color: var(--ink-faded);
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+    }
+
+    .library-footer .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      font-family: 'IM Fell English', serif;
+    }
+
+    /* Add more books prompt */
+    .add-volume {
+      border: 2px dashed var(--border);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 180px;
+      color: var(--ink-faded);
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      transition: all 0.3s;
+    }
+
+    .add-volume:hover {
+      border-color: var(--ink-light);
+      color: var(--ink-light);
+    }
+
+    @media (max-width: 600px) {
+      .social-links {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .shelf {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="nav-back">Return to Entry</a>
+
+  <div class="library-container container">
+    <!-- Profile Section -->
+    <header class="library-header">
+      <div class="librarian-sigil">
+        <span>P</span>
+      </div>
+      <h1>Your Name</h1>
+      <p class="role">Keeper of Digital Volumes</p>
+      <p class="bio">
+        A wanderer through infinite repositories, cataloguing the arcane arts of software
+        and infrastructure. Each project herein represents a journey through the labyrinthine
+        galleries of code, documented for those who seek similar paths.
+      </p>
+      <div class="social-links">
+        <a href="https://github.com/yourusername" target="_blank">GitHub</a>
+        <a href="https://linkedin.com/in/yourusername" target="_blank">LinkedIn</a>
+        <a href="mailto:your@email.com">Correspondence</a>
+      </div>
+    </header>
+
+    <!-- Projects / Volumes Section -->
+    <section class="bookshelf">
+      <div class="section-header">
+        <h2>Volumes</h2>
+      </div>
+
+      <div class="shelf">
+        <!-- Volume I: Homelab -->
+        <div class="book burgundy">
+          <a href="projects/homelab.html">
+            <h3>Homelab</h3>
+            <p>Infrastructure experiments & self-hosted services</p>
+            <div class="tags">
+              <span class="tag">Docker</span>
+              <span class="tag">Linux</span>
+              <span class="tag">Networking</span>
+            </div>
+            <span class="book-number">I</span>
+          </a>
+        </div>
+
+        <!-- Volume II: Placeholder -->
+        <div class="book navy">
+          <a href="projects/placeholder.html">
+            <h3>Volume II</h3>
+            <p>A work yet to be written...</p>
+            <div class="tags">
+              <span class="tag">Coming Soon</span>
+            </div>
+            <span class="book-number">II</span>
+          </a>
+        </div>
+
+        <!-- Template for adding more -->
+        <div class="add-volume">
+          <span>+ Future volumes await...</span>
+        </div>
+      </div>
+
+      <div class="shelf-edge"></div>
+    </section>
+
+    <!-- Certificates Section -->
+    <section class="certificates">
+      <div class="section-header">
+        <h2>Credentials & Certifications</h2>
+      </div>
+
+      <div class="certificates-grid">
+        <div class="certificate">
+          <h3>Certificate Name</h3>
+          <p class="issuer">Issuing Organization</p>
+          <p class="date">Year Obtained</p>
+        </div>
+
+        <div class="certificate">
+          <h3>Another Certificate</h3>
+          <p class="issuer">Another Organization</p>
+          <p class="date">Year Obtained</p>
+        </div>
+
+        <!-- Add more certificates as needed -->
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="library-footer">
+      <p>~ The Library persists, ever expanding ~</p>
+      <a href="index.html" class="back-link">Return to the entrance</a>
+    </footer>
+  </div>
+</body>
+</html>

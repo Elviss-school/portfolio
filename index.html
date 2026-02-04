@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Name - Portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -13,160 +13,319 @@
     }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
-      color: #e6edf3;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      background: #0a0806;
+      color: #c4b59d;
       min-height: 100vh;
-      line-height: 1.6;
+      line-height: 1.8;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(ellipse at center, transparent 0%, #0a0806 70%),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(139, 109, 70, 0.03) 2px,
+          rgba(139, 109, 70, 0.03) 4px
+        );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Hexagonal pattern overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%238b6d46' fill-opacity='0.04'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
     }
 
     .container {
-      max-width: 900px;
+      max-width: 800px;
       margin: 0 auto;
-      padding: 60px 20px;
+      padding: 80px 30px;
+      position: relative;
+      z-index: 2;
     }
 
     header {
       text-align: center;
-      margin-bottom: 60px;
+      margin-bottom: 80px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid rgba(139, 109, 70, 0.3);
     }
 
-    .avatar {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      border: 4px solid #30363d;
-      margin-bottom: 20px;
-      background: #21262d;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 48px;
-      margin-left: auto;
-      margin-right: auto;
+    .emblem {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 30px;
+      position: relative;
+    }
+
+    .emblem::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 2px solid #8b6d46;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    }
+
+    .emblem::after {
+      content: 'I';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'IM Fell English', serif;
+      font-size: 3rem;
+      color: #8b6d46;
     }
 
     h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 10px;
+      font-family: 'IM Fell English', serif;
+      font-size: 3rem;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      margin-bottom: 15px;
+      color: #d4c4a8;
+      text-transform: uppercase;
     }
 
     .tagline {
-      color: #8b949e;
-      font-size: 1.2rem;
-      margin-bottom: 20px;
+      font-style: italic;
+      color: #8b7355;
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+      letter-spacing: 0.05em;
     }
 
     .social-links {
       display: flex;
-      gap: 15px;
+      gap: 30px;
       justify-content: center;
     }
 
     .social-links a {
-      color: #58a6ff;
+      color: #8b6d46;
       text-decoration: none;
-      padding: 8px 16px;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      transition: all 0.2s;
+      font-family: 'IM Fell English', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .social-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: #8b6d46;
+      transition: width 0.3s;
     }
 
     .social-links a:hover {
-      background: #21262d;
-      border-color: #58a6ff;
+      color: #d4c4a8;
+    }
+
+    .social-links a:hover::after {
+      width: 100%;
     }
 
     section {
-      margin-bottom: 50px;
+      margin-bottom: 70px;
     }
 
     h2 {
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #30363d;
+      font-family: 'IM Fell English', serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: 25px;
+      color: #d4c4a8;
+      letter-spacing: 0.1em;
+      text-align: center;
+      position: relative;
+    }
+
+    h2::before,
+    h2::after {
+      content: '~';
+      margin: 0 15px;
+      color: #8b6d46;
     }
 
     .about p {
-      color: #8b949e;
-      font-size: 1.1rem;
+      color: #a89880;
+      font-size: 1.2rem;
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+      font-style: italic;
     }
 
     .skills {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 15px;
+      justify-content: center;
     }
 
     .skill {
-      background: #21262d;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      border: 1px solid #30363d;
+      background: transparent;
+      padding: 8px 20px;
+      font-size: 1rem;
+      border: 1px solid rgba(139, 109, 70, 0.4);
+      color: #a89880;
+      font-family: 'IM Fell English', serif;
+      letter-spacing: 0.05em;
+      transition: all 0.3s;
+    }
+
+    .skill:hover {
+      border-color: #8b6d46;
+      color: #d4c4a8;
+      background: rgba(139, 109, 70, 0.1);
     }
 
     .projects-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
+      gap: 30px;
     }
 
     .project-card {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 10px;
-      padding: 24px;
-      transition: all 0.2s;
+      background: rgba(10, 8, 6, 0.8);
+      border: 1px solid rgba(139, 109, 70, 0.3);
+      padding: 30px;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      border: 1px solid rgba(139, 109, 70, 0.15);
+      pointer-events: none;
     }
 
     .project-card:hover {
-      border-color: #58a6ff;
-      transform: translateY(-2px);
+      border-color: #8b6d46;
+      box-shadow: 0 0 30px rgba(139, 109, 70, 0.1);
     }
 
     .project-card h3 {
-      font-size: 1.2rem;
-      margin-bottom: 10px;
+      font-family: 'IM Fell English', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      margin-bottom: 15px;
+      color: #d4c4a8;
+      letter-spacing: 0.05em;
     }
 
     .project-card p {
-      color: #8b949e;
-      font-size: 0.95rem;
-      margin-bottom: 15px;
+      color: #8b7355;
+      font-size: 1rem;
+      margin-bottom: 20px;
+      font-style: italic;
     }
 
     .project-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 10px;
     }
 
     .project-tags span {
-      background: #0d1117;
-      color: #58a6ff;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 0.8rem;
+      background: transparent;
+      color: #8b6d46;
+      padding: 3px 12px;
+      font-size: 0.85rem;
+      font-family: 'IM Fell English', serif;
+      border: 1px solid rgba(139, 109, 70, 0.3);
+    }
+
+    .quote {
+      text-align: center;
+      padding: 40px 20px;
+      margin-bottom: 60px;
+      border-top: 1px solid rgba(139, 109, 70, 0.2);
+      border-bottom: 1px solid rgba(139, 109, 70, 0.2);
+    }
+
+    .quote p {
+      font-style: italic;
+      font-size: 1.3rem;
+      color: #8b7355;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .quote cite {
+      display: block;
+      margin-top: 15px;
+      font-size: 0.95rem;
+      color: #6b5a47;
+      letter-spacing: 0.1em;
     }
 
     footer {
       text-align: center;
-      padding-top: 40px;
-      border-top: 1px solid #30363d;
-      color: #8b949e;
+      padding-top: 50px;
+      border-top: 1px solid rgba(139, 109, 70, 0.2);
+      color: #6b5a47;
+      font-family: 'IM Fell English', serif;
+      letter-spacing: 0.1em;
+    }
+
+    /* Flickering candle light effect */
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.92; }
+      75% { opacity: 0.97; }
+    }
+
+    .container {
+      animation: flicker 4s infinite;
     }
 
     @media (max-width: 600px) {
       h1 {
         font-size: 2rem;
+        letter-spacing: 0.1em;
       }
 
       .social-links {
         flex-direction: column;
-        align-items: center;
+        gap: 15px;
+      }
+
+      h2::before,
+      h2::after {
+        display: none;
       }
     }
   </style>
@@ -174,27 +333,33 @@
 <body>
   <div class="container">
     <header>
-      <div class="avatar">:)</div>
+      <div class="emblem"></div>
       <h1>Your Name</h1>
-      <p class="tagline">Full Stack Developer | Open Source Enthusiast</p>
+      <p class="tagline">Wanderer of Infinite Repositories</p>
       <div class="social-links">
         <a href="https://github.com/yourusername" target="_blank">GitHub</a>
         <a href="https://linkedin.com/in/yourusername" target="_blank">LinkedIn</a>
-        <a href="mailto:your@email.com">Email</a>
+        <a href="mailto:your@email.com">Correspondence</a>
       </div>
     </header>
 
+    <div class="quote">
+      <p>"The universe (which others call the Library) is composed of an indefinite, perhaps infinite, number of hexagonal galleries..."</p>
+      <cite>~ Jorge Luis Borges</cite>
+    </div>
+
     <section class="about">
-      <h2>About Me</h2>
+      <h2>The Librarian</h2>
       <p>
-        Hello! I'm a passionate developer who loves building things for the web.
-        I enjoy working on open source projects and learning new technologies.
-        When I'm not coding, you can find me exploring new places or playing video games.
+        A seeker of patterns in the endless shelves of code.
+        I traverse the hexagonal chambers of software,
+        cataloguing solutions and crafting new volumes
+        for those who wander these digital galleries.
       </p>
     </section>
 
     <section>
-      <h2>Skills</h2>
+      <h2>Disciplines</h2>
       <div class="skills">
         <span class="skill">JavaScript</span>
         <span class="skill">TypeScript</span>
@@ -208,11 +373,11 @@
     </section>
 
     <section>
-      <h2>Projects</h2>
+      <h2>Volumes</h2>
       <div class="projects-grid">
         <div class="project-card">
-          <h3>Project One</h3>
-          <p>A cool project that does something amazing. Built with modern technologies and best practices.</p>
+          <h3>Volume I</h3>
+          <p>A manuscript of interconnected components, weaving together the threads of user experience.</p>
           <div class="project-tags">
             <span>React</span>
             <span>Node.js</span>
@@ -220,8 +385,8 @@
           </div>
         </div>
         <div class="project-card">
-          <h3>Project Two</h3>
-          <p>Another awesome project showcasing different skills and technologies.</p>
+          <h3>Volume II</h3>
+          <p>An algorithmic treatise on the nature of data and its eternal transformations.</p>
           <div class="project-tags">
             <span>Python</span>
             <span>FastAPI</span>
@@ -229,8 +394,8 @@
           </div>
         </div>
         <div class="project-card">
-          <h3>Project Three</h3>
-          <p>A fun side project that solves a real-world problem in a creative way.</p>
+          <h3>Volume III</h3>
+          <p>A collection of arcane utilities, each solving mysteries of the digital realm.</p>
           <div class="project-tags">
             <span>TypeScript</span>
             <span>Next.js</span>
@@ -241,7 +406,7 @@
     </section>
 
     <footer>
-      <p>&copy; 2025 Your Name. All rights reserved.</p>
+      <p>~ Catalogued in the Year MMXXV ~</p>
     </footer>
   </div>
 </body>

@@ -1,16 +1,16 @@
 /* Library of Babel Portfolio - Shared Styles */
 
-@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Special+Elite&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 :root {
-  --parchment: #f4f1ea;
-  --parchment-dark: #e8e4d9;
-  --ink: #2c2416;
-  --ink-light: #5c4a32;
-  --ink-faded: #8b7355;
-  --accent: #6b4423;
-  --border: #c4b89c;
-  --shadow: rgba(44, 36, 22, 0.15);
+  --parchment: #e8dfc9;
+  --parchment-dark: #ddd3bb;
+  --ink: #2e1f0e;
+  --ink-light: #52412b;
+  --ink-faded: #7a6548;
+  --accent: #8b5a2b;
+  --border: #b8a882;
+  --shadow: rgba(46, 31, 14, 0.18);
 }
 
 * {
@@ -20,7 +20,7 @@
 }
 
 body {
-  font-family: 'Crimson Text', Georgia, serif;
+  font-family: 'Lora', Georgia, serif;
   background: var(--parchment);
   color: var(--ink);
   min-height: 100vh;
@@ -65,8 +65,8 @@ body::after {
 
 /* Typography */
 h1, h2, h3 {
-  font-family: 'IM Fell English', serif;
-  font-weight: 400;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 500;
 }
 
 h1 {
@@ -178,7 +178,7 @@ a:hover {
 
 .book h3 {
   color: #d4af37;
-  font-family: 'IM Fell English', serif;
+  font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1.3rem;
   margin-bottom: 10px;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
@@ -194,7 +194,7 @@ a:hover {
   position: absolute;
   bottom: 15px;
   right: 20px;
-  font-family: 'IM Fell English', serif;
+  font-family: 'Cormorant Garamond', Georgia, serif;
   color: rgba(212, 175, 55, 0.5);
   font-size: 2rem;
 }
@@ -244,7 +244,7 @@ a:hover {
 /* Buttons */
 .btn {
   display: inline-block;
-  font-family: 'IM Fell English', serif;
+  font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1.1rem;
   padding: 12px 30px;
   border: 2px solid var(--ink);
@@ -265,7 +265,7 @@ a:hover {
   position: fixed;
   top: 30px;
   left: 30px;
-  font-family: 'IM Fell English', serif;
+  font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1rem;
   color: var(--ink-faded);
   z-index: 100;
@@ -288,7 +288,7 @@ a:hover {
 }
 
 .tag {
-  font-family: 'Special Elite', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 0.75rem;
   padding: 4px 10px;
   background: rgba(255,255,255,0.1);

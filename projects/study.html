@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volume III: The Curriculum - The Library</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .project-container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 80px 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Book cover header */
+    .book-cover {
+      background: linear-gradient(135deg, #2d4a3e 0%, #1f362c 50%, #15261f 100%);
+      padding: 60px 40px;
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+      box-shadow: 5px 5px 20px rgba(44, 36, 22, 0.4), inset -5px 0 20px rgba(0,0,0,0.2);
+    }
+    .book-cover::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 30px;
+      background: linear-gradient(to right, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+    }
+    .book-cover::after {
+      content: '';
+      position: absolute;
+      left: 12px; top: 20px; bottom: 20px;
+      width: 3px;
+      background: rgba(212, 175, 55, 0.3);
+      box-shadow: 5px 0 0 rgba(212, 175, 55, 0.15);
+    }
+    .book-cover .volume-number {
+      font-family: 'IM Fell English', serif;
+      font-size: 1rem;
+      color: rgba(212, 175, 55, 0.7);
+      letter-spacing: 0.3em;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+    }
+    .book-cover h1 {
+      color: #d4af37;
+      font-size: 2.6rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    .book-cover .subtitle {
+      color: #c4a87c;
+      font-style: italic;
+      font-size: 1.15rem;
+      margin-bottom: 5px;
+    }
+    .book-cover .author {
+      color: rgba(196, 168, 124, 0.6);
+      font-size: 0.9rem;
+      margin-top: 10px;
+      font-family: 'Special Elite', monospace;
+    }
+
+    /* Progress Dashboard */
+    .dashboard {
+      background: var(--parchment-dark);
+      border: 1px solid var(--border);
+      padding: 30px;
+      margin-bottom: 40px;
+    }
+    .dashboard h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 1.5rem;
+    }
+    .overall-progress {
+      margin-bottom: 25px;
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-family: 'IM Fell English', serif;
+      font-size: 1rem;
+      color: var(--ink-light);
+    }
+    .progress-bar {
+      height: 12px;
+      background: var(--parchment);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(to right, #2d4a3e, #4a7c68);
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+    .phase-progress-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    .phase-progress-item .progress-label {
+      font-size: 0.9rem;
+    }
+    .phase-progress-item .progress-bar {
+      height: 8px;
+    }
+    .dashboard-stats {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-number {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.8rem;
+      color: var(--ink);
+      display: block;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--ink-faded);
+      font-family: 'Special Elite', monospace;
+    }
+
+    /* Phase sections */
+    .phase {
+      margin-bottom: 15px;
+    }
+    .phase-toggle {
+      width: 100%;
+      background: none;
+      border: none;
+      border-bottom: 2px solid var(--border);
+      padding: 20px 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+    }
+    .phase-toggle:hover {
+      border-color: var(--ink-faded);
+    }
+    .phase-toggle h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      pointer-events: none;
+    }
+    .phase-toggle .phase-meta {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      pointer-events: none;
+    }
+    .phase-toggle .phase-pct {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.9rem;
+      color: var(--ink-faded);
+    }
+    .phase-toggle .arrow {
+      font-size: 1.2rem;
+      color: var(--ink-faded);
+      transition: transform 0.3s;
+    }
+    .phase.open .phase-toggle .arrow {
+      transform: rotate(90deg);
+    }
+    .phase-content {
+      display: none;
+      padding: 25px 0 10px;
+    }
+    .phase.open .phase-content {
+      display: block;
+    }
+    .phase-quote {
+      font-style: italic;
+      color: var(--ink-faded);
+      margin-bottom: 25px;
+      padding-left: 20px;
+      border-left: 2px solid var(--border);
+    }
+
+    /* Subsections */
+    .subsection {
+      margin-bottom: 35px;
+    }
+    .subsection h3 {
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+    .subsection-desc {
+      margin-bottom: 5px;
+      font-size: 1rem;
+    }
+    .subsection-desc strong {
+      color: var(--ink);
+    }
+    .ai-layer {
+      background: rgba(45, 74, 62, 0.06);
+      border-left: 3px solid #2d4a3e;
+      padding: 10px 15px;
+      margin: 10px 0 15px;
+      font-size: 0.95rem;
+      color: var(--ink-light);
+    }
+    .ai-layer::before {
+      content: 'AI Layer: ';
+      font-family: 'IM Fell English', serif;
+      font-weight: 600;
+      color: #2d4a3e;
+    }
+
+    /* Resource checklist */
+    .resource-list {
+      list-style: none;
+      padding: 0;
+      margin: 12px 0;
+    }
+    .resource-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(196, 184, 156, 0.3);
+    }
+    .resource-item:last-child {
+      border-bottom: none;
+    }
+    .resource-item input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      border: 2px solid var(--border);
+      background: var(--parchment);
+      cursor: pointer;
+      margin-top: 3px;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .resource-item input[type="checkbox"]:checked {
+      background: #2d4a3e;
+      border-color: #2d4a3e;
+    }
+    .resource-item input[type="checkbox"]:checked::after {
+      content: '✓';
+      position: absolute;
+      top: -1px;
+      left: 2px;
+      font-size: 13px;
+      color: #d4af37;
+      font-weight: bold;
+    }
+    .resource-item.completed .resource-info {
+      opacity: 0.5;
+    }
+    .resource-item.completed .resource-name {
+      text-decoration: line-through;
+    }
+    .resource-info {
+      flex: 1;
+    }
+    .resource-name {
+      font-family: 'Crimson Text', serif;
+      font-size: 1rem;
+      color: var(--ink);
+    }
+    .resource-name a {
+      color: var(--accent);
+    }
+    .resource-name a:hover {
+      color: var(--ink);
+      text-decoration: underline;
+    }
+    .resource-meta {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.75rem;
+      color: var(--ink-faded);
+      margin-top: 2px;
+    }
+
+    /* Milestone checklist */
+    .milestone-box {
+      background: var(--parchment-dark);
+      border: 1px solid var(--border);
+      padding: 20px 25px;
+      margin: 20px 0;
+    }
+    .milestone-box h4 {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.15rem;
+      margin-bottom: 15px;
+      color: var(--ink);
+    }
+    .milestone-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 6px 0;
+    }
+    .milestone-item input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      min-width: 16px;
+      border: 2px solid var(--ink-faded);
+      background: transparent;
+      cursor: pointer;
+      margin-top: 3px;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .milestone-item input[type="checkbox"]:checked {
+      background: #2d4a3e;
+      border-color: #2d4a3e;
+    }
+    .milestone-item input[type="checkbox"]:checked::after {
+      content: '✓';
+      position: absolute;
+      top: -2px;
+      left: 1px;
+      font-size: 12px;
+      color: #d4af37;
+      font-weight: bold;
+    }
+    .milestone-item label {
+      font-size: 0.95rem;
+      color: var(--ink-light);
+      cursor: pointer;
+    }
+    .milestone-item.completed label {
+      text-decoration: line-through;
+      opacity: 0.5;
+    }
+
+    /* Notes */
+    .notes-area {
+      margin-top: 15px;
+    }
+    .notes-toggle {
+      background: none;
+      border: 1px dashed var(--border);
+      color: var(--ink-faded);
+      font-family: 'IM Fell English', serif;
+      font-size: 0.9rem;
+      padding: 6px 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .notes-toggle:hover {
+      border-color: var(--ink-faded);
+      color: var(--ink-light);
+    }
+    .notes-toggle.has-notes {
+      border-style: solid;
+      color: var(--ink-light);
+      background: rgba(45, 74, 62, 0.05);
+    }
+    .notes-editor {
+      display: none;
+      margin-top: 10px;
+    }
+    .notes-editor.open {
+      display: block;
+    }
+    .notes-editor textarea {
+      width: 100%;
+      min-height: 80px;
+      background: var(--parchment);
+      border: 1px solid var(--border);
+      padding: 12px;
+      font-family: 'Crimson Text', serif;
+      font-size: 0.95rem;
+      color: var(--ink);
+      resize: vertical;
+      line-height: 1.6;
+    }
+    .notes-editor textarea:focus {
+      outline: none;
+      border-color: var(--ink-faded);
+    }
+    .notes-editor .notes-hint {
+      font-size: 0.75rem;
+      color: var(--ink-faded);
+      font-family: 'Special Elite', monospace;
+      margin-top: 4px;
+    }
+
+    /* Cert roadmap */
+    .cert-tier {
+      margin-bottom: 25px;
+    }
+    .cert-tier h4 {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.1rem;
+      color: var(--ink);
+      margin-bottom: 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid var(--border);
+    }
+    .cert-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 6px 0;
+    }
+    .cert-item input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      min-width: 16px;
+      border: 2px solid var(--border);
+      background: var(--parchment);
+      cursor: pointer;
+      margin-top: 3px;
+      position: relative;
+    }
+    .cert-item input[type="checkbox"]:checked {
+      background: #2d4a3e;
+      border-color: #2d4a3e;
+    }
+    .cert-item input[type="checkbox"]:checked::after {
+      content: '✓';
+      position: absolute;
+      top: -2px; left: 1px;
+      font-size: 12px;
+      color: #d4af37;
+      font-weight: bold;
+    }
+    .cert-info {
+      flex: 1;
+    }
+    .cert-name {
+      font-size: 0.95rem;
+      color: var(--ink);
+    }
+    .cert-name a {
+      color: var(--accent);
+    }
+    .cert-cost {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.75rem;
+      color: var(--ink-faded);
+    }
+
+    /* Hands-on box */
+    .hands-on {
+      background: rgba(45, 74, 62, 0.04);
+      border: 1px solid rgba(45, 74, 62, 0.2);
+      padding: 12px 18px;
+      margin: 10px 0;
+      font-size: 0.95rem;
+      color: var(--ink-light);
+    }
+    .hands-on::before {
+      content: 'Hands-on: ';
+      font-family: 'IM Fell English', serif;
+      font-weight: 600;
+      color: #2d4a3e;
+    }
+
+    /* Quick wins */
+    .quick-wins .resource-item {
+      border-bottom: 1px solid rgba(196, 184, 156, 0.2);
+    }
+
+    /* Collapsible table sections */
+    .info-section {
+      margin-bottom: 10px;
+    }
+    .info-toggle {
+      width: 100%;
+      background: none;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 15px 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+    }
+    .info-toggle h2 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+    .info-toggle .arrow {
+      font-size: 1.2rem;
+      color: var(--ink-faded);
+      transition: transform 0.3s;
+    }
+    .info-section.open .info-toggle .arrow {
+      transform: rotate(90deg);
+    }
+    .info-content {
+      display: none;
+      padding: 20px 0;
+    }
+    .info-section.open .info-content {
+      display: block;
+    }
+
+    /* Career table */
+    .career-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    .career-table th {
+      font-family: 'IM Fell English', serif;
+      text-align: left;
+      padding: 8px 12px;
+      border-bottom: 2px solid var(--border);
+      color: var(--ink);
+      font-weight: 400;
+    }
+    .career-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(196, 184, 156, 0.3);
+      font-size: 0.95rem;
+      color: var(--ink-light);
+    }
+    .career-table caption {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.05rem;
+      text-align: left;
+      padding: 10px 0;
+      color: var(--ink);
+    }
+
+    /* Reset / Export buttons */
+    .data-controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .data-btn {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.8rem;
+      padding: 6px 15px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--ink-faded);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .data-btn:hover {
+      border-color: var(--ink-faded);
+      color: var(--ink-light);
+    }
+    .data-btn.danger:hover {
+      border-color: #722f37;
+      color: #722f37;
+    }
+
+    /* Navigation */
+    .project-nav {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 40px;
+      margin-top: 50px;
+      border-top: 1px solid var(--border);
+    }
+    .project-nav a {
+      font-family: 'IM Fell English', serif;
+    }
+    .project-nav .next::after { content: ' →'; }
+    .project-nav .prev::before { content: '← '; }
+
+    @media (max-width: 600px) {
+      .book-cover { padding: 40px 25px; }
+      .book-cover h1 { font-size: 2rem; }
+      .phase-progress-grid { grid-template-columns: 1fr; }
+      .dashboard-stats { flex-wrap: wrap; gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="../library.html" class="nav-back">Return to Library</a>
+
+  <div class="project-container container">
+    <!-- Book Cover -->
+    <header class="book-cover">
+      <p class="volume-number">Volume III</p>
+      <h1>The Curriculum</h1>
+      <p class="subtitle">Cybersecurity Career Path with AI Specialization</p>
+      <p class="author">18-Month Complete Future-Proof Curriculum</p>
+    </header>
+
+    <!-- Progress Dashboard -->
+    <section class="dashboard" id="dashboard">
+      <h2>Progress</h2>
+      <div class="overall-progress">
+        <div class="progress-label">
+          <span>Overall Completion</span>
+          <span id="overall-pct">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="overall-fill"></div>
+        </div>
+      </div>
+      <div class="phase-progress-grid">
+        <div class="phase-progress-item">
+          <div class="progress-label"><span>Phase 1 — Foundations</span><span id="p1-pct">0%</span></div>
+          <div class="progress-bar"><div class="progress-fill" id="p1-fill"></div></div>
+        </div>
+        <div class="phase-progress-item">
+          <div class="progress-label"><span>Phase 2 — Core Cyber + AI</span><span id="p2-pct">0%</span></div>
+          <div class="progress-bar"><div class="progress-fill" id="p2-fill"></div></div>
+        </div>
+        <div class="phase-progress-item">
+          <div class="progress-label"><span>Phase 3 — Specialization</span><span id="p3-pct">0%</span></div>
+          <div class="progress-bar"><div class="progress-fill" id="p3-fill"></div></div>
+        </div>
+        <div class="phase-progress-item">
+          <div class="progress-label"><span>Phase 4 — Advanced</span><span id="p4-pct">0%</span></div>
+          <div class="progress-bar"><div class="progress-fill" id="p4-fill"></div></div>
+        </div>
+      </div>
+      <div class="dashboard-stats">
+        <div class="stat"><span class="stat-number" id="stat-resources">0</span><span class="stat-label">Resources Done</span></div>
+        <div class="stat"><span class="stat-number" id="stat-milestones">0</span><span class="stat-label">Milestones Hit</span></div>
+        <div class="stat"><span class="stat-number" id="stat-certs">0</span><span class="stat-label">Certs Earned</span></div>
+        <div class="stat"><span class="stat-number" id="stat-notes">0</span><span class="stat-label">Notes Written</span></div>
+      </div>
+    </section>
+
+    <!-- ===================== PHASE 1 ===================== -->
+    <div class="phase" data-phase="1">
+      <button class="phase-toggle" onclick="togglePhase(this)">
+        <h2>Phase 1: Foundations (Months 1-4)</h2>
+        <div class="phase-meta">
+          <span class="phase-pct" id="p1-toggle-pct">0%</span>
+          <span class="arrow">▸</span>
+        </div>
+      </button>
+      <div class="phase-content">
+        <p class="phase-quote">"Learn how systems work before you learn how to break them"</p>
+
+        <!-- 1.1 Networking -->
+        <div class="subsection">
+          <h3>1.1 — Networking Fundamentals</h3>
+          <p class="subsection-desc"><strong>Traditional:</strong> TCP/IP, DNS, HTTP/S, subnetting, firewalls, VPNs, routing, switching.</p>
+          <div class="ai-layer">Understand how AI/ML traffic traverses networks, API-based model serving, and how to identify anomalous ML inference traffic.</div>
+          <ul class="resource-list">
+            <li class="resource-item"><input type="checkbox" data-id="p1-net-1"><div class="resource-info"><span class="resource-name"><strong><a href="https://www.professormesser.com/network-plus/n10-009/n10-009-video/n10-009-training-course/" target="_blank">Professor Messer — CompTIA Network+</a></strong></span><div class="resource-meta">FREE · ~23 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-net-2"><div class="resource-info"><span class="resource-name"><a href="https://www.netacad.com/courses/networking/ccna-introduction-networks" target="_blank">Cisco — Intro to Networks</a></span><div class="resource-meta">FREE · ~70 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-net-3"><div class="resource-info"><span class="resource-name"><a href="https://www.youtube.com/c/NetworkChuck" target="_blank">NetworkChuck — Networking Fundamentals</a></span><div class="resource-meta">FREE · Pick topics</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-net-4"><div class="resource-info"><span class="resource-name"><a href="https://www.practicalnetworking.net/stand-alone/subnetting-mastery/" target="_blank">Practical Networking — Subnetting Mastery</a></span><div class="resource-meta">FREE · ~5 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-net-5"><div class="resource-info"><span class="resource-name"><strong><a href="https://tryhackme.com/module/network-fundamentals" target="_blank">TryHackMe — Network Fundamentals</a></strong></span><div class="resource-meta">FREE/Paid · ~8 hours</div></div></li>
+          </ul>
+          <div class="hands-on">Use your Proxmox homelab to set up VLANs, firewall rules, and capture traffic with Wireshark.</div>
+          <div class="notes-area">
+            <button class="notes-toggle" data-notes="p1-net" onclick="toggleNotes(this)">+ Notes</button>
+            <div class="notes-editor" data-notes="p1-net">
+              <textarea data-notes="p1-net" placeholder="Your networking study notes..."></textarea>
+              <div class="notes-hint">Auto-saved to your browser</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1.2 Linux -->
+        <div class="subsection">
+          <h3>1.2 — Linux & Operating Systems</h3>
+          <p class="subsection-desc"><strong>Traditional:</strong> Linux CLI, file permissions, process management, systemd, log analysis, bash scripting.</p>
+          <div class="ai-layer">Most ML frameworks (PyTorch, TensorFlow) run on Linux. ML model servers use Linux containers.</div>
+          <ul class="resource-list">
+            <li class="resource-item"><input type="checkbox" data-id="p1-linux-1"><div class="resource-info"><span class="resource-name"><strong><a href="https://tryhackme.com/module/linux-fundamentals" target="_blank">TryHackMe — Linux Fundamentals (Part 1-3)</a></strong></span><div class="resource-meta">FREE · ~6 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-linux-2"><div class="resource-info"><span class="resource-name"><a href="https://overthewire.org/wargames/bandit/" target="_blank">OverTheWire — Bandit Wargame</a></span><div class="resource-meta">FREE · ~10 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-linux-3"><div class="resource-info"><span class="resource-name"><a href="https://linuxjourney.com/" target="_blank">Linux Journey</a></span><div class="resource-meta">FREE · ~15 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-linux-4"><div class="resource-info"><span class="resource-name"><a href="https://linuxcommand.org/tlcl.php" target="_blank">The Linux Command Line (free book)</a></span><div class="resource-meta">FREE · Reference</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-linux-5"><div class="resource-info"><span class="resource-name"><strong><a href="https://academy.hackthebox.com/module/details/18" target="_blank">HackTheBox Academy — Linux Fundamentals</a></strong></span><div class="resource-meta">FREE tier · ~8 hours</div></div></li>
+          </ul>
+          <div class="hands-on">Spin up Kali Linux, Parrot OS, and Ubuntu Server VMs in Proxmox for practice.</div>
+          <div class="notes-area">
+            <button class="notes-toggle" data-notes="p1-linux" onclick="toggleNotes(this)">+ Notes</button>
+            <div class="notes-editor" data-notes="p1-linux">
+              <textarea data-notes="p1-linux" placeholder="Your Linux study notes..."></textarea>
+              <div class="notes-hint">Auto-saved to your browser</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1.3 Python -->
+        <div class="subsection">
+          <h3>1.3 — Programming: Python + Security Scripting</h3>
+          <p class="subsection-desc"><strong>Traditional:</strong> Python for automation — parsing logs, scanning networks, automating security tasks. Bash scripting.</p>
+          <div class="ai-layer">Python is THE language for AI/ML. Same language, different libraries. Security Python → ML Python is natural.</div>
+          <ul class="resource-list">
+            <li class="resource-item"><input type="checkbox" data-id="p1-py-1"><div class="resource-info"><span class="resource-name"><strong><a href="https://automatetheboringstuff.com/" target="_blank">Automate the Boring Stuff with Python</a></strong></span><div class="resource-meta">FREE online · ~20 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-py-2"><div class="resource-info"><span class="resource-name"><a href="https://academy.tcm-sec.com/p/python-101-for-hackers" target="_blank">TCM Security — Python 101 for Hackers</a></span><div class="resource-meta">~$30 · ~7 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-py-3"><div class="resource-info"><span class="resource-name"><a href="https://tryhackme.com/room/pythonbasics" target="_blank">TryHackMe — Python Basics</a></span><div class="resource-meta">FREE · ~2 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-py-4"><div class="resource-info"><span class="resource-name"><a href="https://www.coursera.org/specializations/pythonforcybersecurity" target="_blank">Python for Cybersecurity (Coursera)</a></span><div class="resource-meta">Free audit · ~4 months</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-py-5"><div class="resource-info"><span class="resource-name"><strong><a href="https://www.kaggle.com/learn/python" target="_blank">Kaggle — Python Course</a></strong></span><div class="resource-meta">FREE + cert · ~5 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-py-6"><div class="resource-info"><span class="resource-name"><a href="https://www.kaggle.com/learn/pandas" target="_blank">Kaggle — Pandas Course</a></span><div class="resource-meta">FREE + cert · ~4 hours</div></div></li>
+          </ul>
+          <div class="notes-area">
+            <button class="notes-toggle" data-notes="p1-py" onclick="toggleNotes(this)">+ Notes</button>
+            <div class="notes-editor" data-notes="p1-py">
+              <textarea data-notes="p1-py" placeholder="Your Python study notes..."></textarea>
+              <div class="notes-hint">Auto-saved to your browser</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1.4 Security+ -->
+        <div class="subsection">
+          <h3>1.4 — Security Fundamentals + CompTIA Security+</h3>
+          <p class="subsection-desc"><strong>Traditional:</strong> CIA triad, risk management, threat types, cryptography, identity management, incident response.</p>
+          <div class="ai-layer">How AI changes the threat landscape — AI-generated phishing, deepfakes, AI-powered attacks and defenses.</div>
+          <ul class="resource-list">
+            <li class="resource-item"><input type="checkbox" data-id="p1-sec-1"><div class="resource-info"><span class="resource-name"><strong><a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/sy0-701-comptia-security-702-course/" target="_blank">Professor Messer — Security+ SY0-701</a></strong></span><div class="resource-meta">FREE · ~25 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-sec-2"><div class="resource-info"><span class="resource-name"><a href="https://tryhackme.com/path/outline/presecurity" target="_blank">TryHackMe — Pre-Security Path</a></span><div class="resource-meta">FREE/Paid · ~40 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-sec-3"><div class="resource-info"><span class="resource-name"><strong><a href="https://tryhackme.com/path/outline/beginner" target="_blank">TryHackMe — Complete Beginner Path</a></strong></span><div class="resource-meta">FREE/Paid · ~64 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-sec-4"><div class="resource-info"><span class="resource-name"><a href="https://www.udemy.com/course/comptia-security-practice-exams/" target="_blank">Jason Dion — Security+ Practice Exams</a></span><div class="resource-meta">~$15 · 6 exams</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-sec-5"><div class="resource-info"><span class="resource-name"><a href="https://www.nist.gov/cyberframework" target="_blank">NIST Cybersecurity Framework</a></span><div class="resource-meta">FREE · Reference</div></div></li>
+          </ul>
+          <div class="notes-area">
+            <button class="notes-toggle" data-notes="p1-sec" onclick="toggleNotes(this)">+ Notes</button>
+            <div class="notes-editor" data-notes="p1-sec">
+              <textarea data-notes="p1-sec" placeholder="Your Security+ study notes..."></textarea>
+              <div class="notes-hint">Auto-saved to your browser</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1.5 AI Literacy -->
+        <div class="subsection">
+          <h3>1.5 — AI & Machine Learning Literacy</h3>
+          <p class="subsection-desc">Not about becoming an ML engineer — understanding AI/ML enough to <strong>secure it</strong>.</p>
+          <ul class="resource-list">
+            <li class="resource-item"><input type="checkbox" data-id="p1-ai-1"><div class="resource-info"><span class="resource-name"><strong><a href="https://www.elementsofai.com/" target="_blank">Elements of AI</a></strong></span><div class="resource-meta">FREE + cert · ~30 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-ai-2"><div class="resource-info"><span class="resource-name"><strong><a href="https://developers.google.com/machine-learning/crash-course" target="_blank">Google ML Crash Course</a></strong></span><div class="resource-meta">FREE · ~15 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-ai-3"><div class="resource-info"><span class="resource-name"><a href="https://skillsbuild.org/students/course-catalog/artificial-intelligence" target="_blank">IBM AI Fundamentals</a></span><div class="resource-meta">FREE + cert · ~10 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-ai-4"><div class="resource-info"><span class="resource-name"><a href="https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi" target="_blank">3Blue1Brown — Neural Networks</a></span><div class="resource-meta">FREE · ~1 hour</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-ai-5"><div class="resource-info"><span class="resource-name"><strong><a href="https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-fundamentals/" target="_blank">Microsoft AI-900 Prep</a></strong></span><div class="resource-meta">FREE learning / $165 exam · ~10 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p1-ai-6"><div class="resource-info"><span class="resource-name"><a href="https://www.kaggle.com/learn/intro-to-machine-learning" target="_blank">Kaggle — Intro to Machine Learning</a></span><div class="resource-meta">FREE + cert · ~3 hours</div></div></li>
+          </ul>
+          <div class="notes-area">
+            <button class="notes-toggle" data-notes="p1-ai" onclick="toggleNotes(this)">+ Notes</button>
+            <div class="notes-editor" data-notes="p1-ai">
+              <textarea data-notes="p1-ai" placeholder="Your AI/ML literacy notes..."></textarea>
+              <div class="notes-hint">Auto-saved to your browser</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 1 Milestones -->
+        <div class="milestone-box">
+          <h4>Phase 1 Milestone Checklist</h4>
+          <div class="milestone-item"><input type="checkbox" data-id="m1-1"><label>Can explain TCP/IP, DNS, HTTP, subnetting without notes</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m1-2"><label>Comfortable in Linux command line</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m1-3"><label>Can write Python scripts to automate security tasks</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m1-4"><label>Passed CompTIA Security+ (or scheduled)</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m1-5"><label>Can explain how ML models work conceptually</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m1-6"><label>Completed Elements of AI or equivalent</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m1-7"><label>Have Microsoft AI-900 (or scheduled)</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m1-8"><label>Homelab running with security tools deployed</label></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PHASE 2 ===================== -->
+    <div class="phase" data-phase="2">
+      <button class="phase-toggle" onclick="togglePhase(this)">
+        <h2>Phase 2: Core Cyber + AI Detection (Months 4-8)</h2>
+        <div class="phase-meta">
+          <span class="phase-pct" id="p2-toggle-pct">0%</span>
+          <span class="arrow">▸</span>
+        </div>
+      </button>
+      <div class="phase-content">
+        <p class="phase-quote">"Learn to defend and attack systems — then add AI to both"</p>
+
+        <!-- 2.1 SOC -->
+        <div class="subsection">
+          <h3>2.1 — Security Operations & Blue Team</h3>
+          <p class="subsection-desc"><strong>Traditional:</strong> SIEM (Splunk/Elastic), log analysis, alert triage, incident detection, threat hunting, EDR.</p>
+          <div class="ai-layer">AI-powered SIEM, ML-based anomaly detection, AI for threat hunting, understanding AI-generated false positives.</div>
+          <ul class="resource-list">
+            <li class="resource-item"><input type="checkbox" data-id="p2-soc-1"><div class="resource-info"><span class="resource-name"><strong><a href="https://tryhackme.com/path/outline/soclevel1" target="_blank">TryHackMe — SOC Level 1 Path</a></strong></span><div class="resource-meta">Paid (~$14/mo) · ~48 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-soc-2"><div class="resource-info"><span class="resource-name"><a href="https://tryhackme.com/path/outline/soclevel2" target="_blank">TryHackMe — SOC Level 2 Path</a></span><div class="resource-meta">Paid · ~40 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-soc-3"><div class="resource-info"><span class="resource-name"><a href="https://www.splunk.com/en_us/training/courses/splunk-fundamentals-1.html" target="_blank">Splunk Fundamentals 1</a></span><div class="resource-meta">FREE · ~12 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-soc-4"><div class="resource-info"><span class="resource-name"><a href="https://www.elastic.co/training/free" target="_blank">Elastic Security Fundamentals</a></span><div class="resource-meta">FREE · ~8 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-soc-5"><div class="resource-info"><span class="resource-name"><strong><a href="https://blueteamlabs.online/" target="_blank">Blue Team Labs Online</a></strong></span><div class="resource-meta">Free/Paid · Ongoing</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-soc-6"><div class="resource-info"><span class="resource-name"><a href="https://letsdefend.io/" target="_blank">LetsDefend — SOC Analyst Training</a></span><div class="resource-meta">Free/Paid · ~40 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-soc-7"><div class="resource-info"><span class="resource-name"><a href="https://atlas.mitre.org/" target="_blank">MITRE ATLAS (ATT&CK for AI)</a></span><div class="resource-meta">FREE · AI attack framework</div></div></li>
+          </ul>
+          <div class="hands-on">Deploy Security Onion or Wazuh in Proxmox. Feed it logs. Write detection rules. Build a simple ML anomaly detector.</div>
+          <div class="notes-area">
+            <button class="notes-toggle" data-notes="p2-soc" onclick="toggleNotes(this)">+ Notes</button>
+            <div class="notes-editor" data-notes="p2-soc"><textarea data-notes="p2-soc" placeholder="Your SOC/Blue Team notes..."></textarea><div class="notes-hint">Auto-saved to your browser</div></div>
+          </div>
+        </div>
+
+        <!-- 2.2 Pentesting -->
+        <div class="subsection">
+          <h3>2.2 — Penetration Testing & Ethical Hacking</h3>
+          <p class="subsection-desc"><strong>Traditional:</strong> Recon, scanning, exploitation, privesc, reporting. Web app & network pentesting.</p>
+          <div class="ai-layer">AI-assisted pentesting, testing AI features in web apps, prompt injection, LLM exploitation.</div>
+          <ul class="resource-list">
+            <li class="resource-item"><input type="checkbox" data-id="p2-pen-1"><div class="resource-info"><span class="resource-name"><strong><a href="https://tryhackme.com/path/outline/jrpenetrationtester" target="_blank">TryHackMe — Jr Penetration Tester</a></strong></span><div class="resource-meta">Paid · ~56 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-pen-2"><div class="resource-info"><span class="resource-name"><strong><a href="https://academy.hackthebox.com/path/preview/penetration-tester" target="_blank">HTB Academy — Penetration Tester Path</a></strong></span><div class="resource-meta">Free/Paid · ~100+ hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-pen-3"><div class="resource-info"><span class="resource-name"><a href="https://academy.tcm-sec.com/p/practical-ethical-hacking-the-complete-course" target="_blank">TCM — Practical Ethical Hacking</a></span><div class="resource-meta">~$30 · ~25 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-pen-4"><div class="resource-info"><span class="resource-name"><a href="https://portswigger.net/web-security" target="_blank">PortSwigger Web Security Academy</a></span><div class="resource-meta">FREE · ~80+ hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-pen-5"><div class="resource-info"><span class="resource-name"><a href="https://www.hackthebox.com/" target="_blank">HackTheBox — Boxes & Challenges</a></span><div class="resource-meta">Free/Paid · Ongoing</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-pen-6"><div class="resource-info"><span class="resource-name"><strong><a href="https://portswigger.net/web-security/llm-attacks" target="_blank">PortSwigger — LLM Attack Labs</a></strong></span><div class="resource-meta">FREE · LLM exploitation</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-pen-7"><div class="resource-info"><span class="resource-name"><a href="https://gandalf.lakera.ai/" target="_blank">Gandalf (Lakera) — Prompt Injection</a></span><div class="resource-meta">FREE · Practice</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-pen-8"><div class="resource-info"><span class="resource-name"><a href="https://dreadnode.io/crucible" target="_blank">Crucible (Dreadnode) — AI Red-Teaming</a></span><div class="resource-meta">FREE · Sandbox</div></div></li>
+          </ul>
+          <div class="notes-area">
+            <button class="notes-toggle" data-notes="p2-pen" onclick="toggleNotes(this)">+ Notes</button>
+            <div class="notes-editor" data-notes="p2-pen"><textarea data-notes="p2-pen" placeholder="Your pentesting notes..."></textarea><div class="notes-hint">Auto-saved to your browser</div></div>
+          </div>
+        </div>
+
+        <!-- 2.3 Cloud -->
+        <div class="subsection">
+          <h3>2.3 — Cloud Security</h3>
+          <p class="subsection-desc"><strong>Traditional:</strong> AWS/Azure/GCP security, IAM, VPC, cloud misconfigs, container security.</p>
+          <div class="ai-layer">Securing ML workloads in cloud, MLOps pipeline security, API security for model endpoints.</div>
+          <ul class="resource-list">
+            <li class="resource-item"><input type="checkbox" data-id="p2-cloud-1"><div class="resource-info"><span class="resource-name"><strong><a href="https://aws.amazon.com/training/learn-about/cloud-practitioner/" target="_blank">AWS Cloud Practitioner (free training)</a></strong></span><div class="resource-meta">FREE training / $100 exam · ~20 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-cloud-2"><div class="resource-info"><span class="resource-name"><a href="https://explore.skillbuilder.aws/learn/course/external/view/elearning/48/aws-security-fundamentals" target="_blank">AWS Security Fundamentals</a></span><div class="resource-meta">FREE · ~2 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-cloud-3"><div class="resource-info"><span class="resource-name"><strong><a href="https://learn.microsoft.com/en-us/credentials/certifications/security-compliance-and-identity-fundamentals/" target="_blank">Microsoft SC-900</a></strong></span><div class="resource-meta">FREE training / $165 exam · ~10 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-cloud-4"><div class="resource-info"><span class="resource-name"><a href="https://github.com/RhinoSecurityLabs/cloudgoat" target="_blank">CloudGoat (vulnerable AWS)</a></span><div class="resource-meta">FREE · Hands-on</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-cloud-5"><div class="resource-info"><span class="resource-name"><a href="https://kodekloud.com/" target="_blank">Kubernetes Security (KodeKloud)</a></span><div class="resource-meta">Free/Paid · ~10 hours</div></div></li>
+          </ul>
+          <div class="notes-area">
+            <button class="notes-toggle" data-notes="p2-cloud" onclick="toggleNotes(this)">+ Notes</button>
+            <div class="notes-editor" data-notes="p2-cloud"><textarea data-notes="p2-cloud" placeholder="Your cloud security notes..."></textarea><div class="notes-hint">Auto-saved to your browser</div></div>
+          </div>
+        </div>
+
+        <!-- 2.4 ML for Security -->
+        <div class="subsection">
+          <h3>2.4 — Machine Learning for Security</h3>
+          <p class="subsection-desc">Where cybersecurity and AI truly merge. Learn enough ML to build security tools AND understand what you're protecting.</p>
+          <ul class="resource-list">
+            <li class="resource-item"><input type="checkbox" data-id="p2-ml-1"><div class="resource-info"><span class="resource-name"><strong><a href="https://www.coursera.org/specializations/machine-learning-introduction" target="_blank">Andrew Ng — ML Specialization</a></strong></span><div class="resource-meta">Free audit · ~3 months</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-ml-2"><div class="resource-info"><span class="resource-name"><strong><a href="https://course.fast.ai/" target="_blank">Fast.ai — Practical Deep Learning</a></strong></span><div class="resource-meta">FREE · ~7 weeks</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-ml-3"><div class="resource-info"><span class="resource-name"><a href="https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ" target="_blank">Karpathy — Neural Networks: Zero to Hero</a></span><div class="resource-meta">FREE · ~15 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-ml-4"><div class="resource-info"><span class="resource-name"><a href="https://www.kaggle.com/learn/intro-to-deep-learning" target="_blank">Kaggle — Intro to Deep Learning</a></span><div class="resource-meta">FREE + cert · ~4 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-ml-5"><div class="resource-info"><span class="resource-name"><a href="https://huggingface.co/learn/nlp-course" target="_blank">Hugging Face — NLP Course</a></span><div class="resource-meta">FREE · ~15 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p2-ml-6"><div class="resource-info"><span class="resource-name"><a href="https://jalammar.github.io/illustrated-transformer/" target="_blank">Jay Alammar — Illustrated Transformer</a></span><div class="resource-meta">FREE · ~2 hours</div></div></li>
+          </ul>
+          <div class="hands-on">Build an ML-based network anomaly detector using Netra PCAP data. Classify normal vs malicious traffic.</div>
+          <div class="notes-area">
+            <button class="notes-toggle" data-notes="p2-ml" onclick="toggleNotes(this)">+ Notes</button>
+            <div class="notes-editor" data-notes="p2-ml"><textarea data-notes="p2-ml" placeholder="Your ML for security notes..."></textarea><div class="notes-hint">Auto-saved to your browser</div></div>
+          </div>
+        </div>
+
+        <!-- Phase 2 Milestones -->
+        <div class="milestone-box">
+          <h4>Phase 2 Milestone Checklist</h4>
+          <div class="milestone-item"><input type="checkbox" data-id="m2-1"><label>Can triage alerts in a SIEM (Splunk or Elastic)</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m2-2"><label>Can use MITRE ATT&CK AND MITRE ATLAS</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m2-3"><label>Completed 20+ CTF challenges (mix of traditional + AI)</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m2-4"><label>Can perform basic web app pentesting (Burp Suite, OWASP Top 10)</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m2-5"><label>Can test LLM features for prompt injection & OWASP LLM Top 10</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m2-6"><label>Understand AWS/Azure security fundamentals</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m2-7"><label>Have AWS Cloud Practitioner cert (or scheduled)</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m2-8"><label>Can build a basic ML model in Python</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m2-9"><label>Understand how LLMs work (transformers, tokenization, attention)</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m2-10"><label>Running a SIEM in homelab with detection rules</label></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PHASE 3 ===================== -->
+    <div class="phase" data-phase="3">
+      <button class="phase-toggle" onclick="togglePhase(this)">
+        <h2>Phase 3: Specialization + AI Deep Dive (Months 8-12)</h2>
+        <div class="phase-meta">
+          <span class="phase-pct" id="p3-toggle-pct">0%</span>
+          <span class="arrow">▸</span>
+        </div>
+      </button>
+      <div class="phase-content">
+        <p class="phase-quote">"Pick your track, go deep, and add the AI security layer that makes you unique"</p>
+
+        <!-- 3.1 Track A: Offensive -->
+        <div class="subsection">
+          <h3>3.1 — Track A: Offensive Security (Red Team)</h3>
+          <ul class="resource-list">
+            <li class="resource-item"><input type="checkbox" data-id="p3-off-1"><div class="resource-info"><span class="resource-name"><strong><a href="https://academy.hackthebox.com/" target="_blank">HTB — Advanced Penetration Tester</a></strong></span><div class="resource-meta">Paid</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-off-2"><div class="resource-info"><span class="resource-name"><a href="https://portswigger.net/web-security/all-labs" target="_blank">PortSwigger — All Labs (complete them all)</a></span><div class="resource-meta">FREE</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-off-3"><div class="resource-info"><span class="resource-name"><a href="https://tryhackme.com/path/outline/pentesting" target="_blank">TryHackMe — Offensive Pentesting</a></span><div class="resource-meta">Paid</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-off-4"><div class="resource-info"><span class="resource-name"><a href="https://www.vulnhub.com/" target="_blank">VulnHub — Boot2Root VMs</a></span><div class="resource-meta">FREE</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-off-5"><div class="resource-info"><span class="resource-name"><a href="https://github.com/NVIDIA/garak" target="_blank">Garak — LLM Vulnerability Scanner</a></span><div class="resource-meta">FREE · AI red team tool</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-off-6"><div class="resource-info"><span class="resource-name"><a href="https://github.com/Azure/PyRIT" target="_blank">PyRIT — Microsoft AI Red Teaming</a></span><div class="resource-meta">FREE · AI red team tool</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-off-7"><div class="resource-info"><span class="resource-name"><a href="https://www.promptfoo.dev/" target="_blank">Promptfoo — LLM Red-Teaming</a></span><div class="resource-meta">FREE · AI red team tool</div></div></li>
+          </ul>
+          <div class="notes-area">
+            <button class="notes-toggle" data-notes="p3-off" onclick="toggleNotes(this)">+ Notes</button>
+            <div class="notes-editor" data-notes="p3-off"><textarea data-notes="p3-off" placeholder="Your offensive security notes..."></textarea><div class="notes-hint">Auto-saved to your browser</div></div>
+          </div>
+        </div>
+
+        <!-- 3.2 Track B: Defensive -->
+        <div class="subsection">
+          <h3>3.2 — Track B: Defensive Security (Blue Team)</h3>
+          <ul class="resource-list">
+            <li class="resource-item"><input type="checkbox" data-id="p3-def-1"><div class="resource-info"><span class="resource-name"><strong><a href="https://tryhackme.com/path/outline/blueteam" target="_blank">TryHackMe — Cyber Defense Path</a></strong></span><div class="resource-meta">Paid</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-def-2"><div class="resource-info"><span class="resource-name"><a href="https://letsdefend.io/" target="_blank">LetsDefend — SOC Analyst Path</a></span><div class="resource-meta">Free/Paid</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-def-3"><div class="resource-info"><span class="resource-name"><a href="https://blueteamlabs.online/" target="_blank">Blue Team Labs Online</a></span><div class="resource-meta">Free/Paid</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-def-4"><div class="resource-info"><span class="resource-name"><a href="https://cyberdefenders.org/" target="_blank">CyberDefenders — Blue Team CTF</a></span><div class="resource-meta">FREE</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-def-5"><div class="resource-info"><span class="resource-name"><a href="https://www.antisyphontraining.com/on-demand-courses/soc-core-skills-w-john-strand/" target="_blank">Antisyphon — SOC Core Skills</a></span><div class="resource-meta">Pay-what-you-can</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-def-6"><div class="resource-info"><span class="resource-name"><a href="https://github.com/NVIDIA/NeMo-Guardrails" target="_blank">NeMo Guardrails (NVIDIA)</a></span><div class="resource-meta">FREE · LLM guardrails</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-def-7"><div class="resource-info"><span class="resource-name"><a href="https://github.com/protectai/llm-guard" target="_blank">LLM Guard (Protect AI)</a></span><div class="resource-meta">FREE · LLM I/O security</div></div></li>
+          </ul>
+          <div class="notes-area">
+            <button class="notes-toggle" data-notes="p3-def" onclick="toggleNotes(this)">+ Notes</button>
+            <div class="notes-editor" data-notes="p3-def"><textarea data-notes="p3-def" placeholder="Your defensive security notes..."></textarea><div class="notes-hint">Auto-saved to your browser</div></div>
+          </div>
+        </div>
+
+        <!-- 3.3 Track C: Cloud -->
+        <div class="subsection">
+          <h3>3.3 — Track C: Cloud Security + MLSecOps</h3>
+          <ul class="resource-list">
+            <li class="resource-item"><input type="checkbox" data-id="p3-cld-1"><div class="resource-info"><span class="resource-name"><strong><a href="https://explore.skillbuilder.aws/" target="_blank">AWS Security Specialty (training)</a></strong></span><div class="resource-meta">FREE training</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-cld-2"><div class="resource-info"><span class="resource-name"><strong><a href="https://learn.microsoft.com/en-us/credentials/certifications/azure-security-engineer/" target="_blank">Azure AZ-500 Learning Path</a></strong></span><div class="resource-meta">FREE learning</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-cld-3"><div class="resource-info"><span class="resource-name"><a href="http://flaws.cloud/" target="_blank">Flaws.cloud & Flaws2.cloud</a></span><div class="resource-meta">FREE</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-cld-4"><div class="resource-info"><span class="resource-name"><a href="https://github.com/madhuakula/kubernetes-goat" target="_blank">Kubernetes Goat</a></span><div class="resource-meta">FREE</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-cld-5"><div class="resource-info"><span class="resource-name"><a href="https://mlflow.org/" target="_blank">MLflow — ML Lifecycle Management</a></span><div class="resource-meta">FREE</div></div></li>
+          </ul>
+          <div class="notes-area">
+            <button class="notes-toggle" data-notes="p3-cld" onclick="toggleNotes(this)">+ Notes</button>
+            <div class="notes-editor" data-notes="p3-cld"><textarea data-notes="p3-cld" placeholder="Your cloud/MLSecOps notes..."></textarea><div class="notes-hint">Auto-saved to your browser</div></div>
+          </div>
+        </div>
+
+        <!-- 3.4 AI Security Core -->
+        <div class="subsection">
+          <h3>3.4 — AI Security Core (Everyone Does This)</h3>
+          <p class="subsection-desc"><strong>Frameworks to study:</strong></p>
+          <ul class="resource-list">
+            <li class="resource-item"><input type="checkbox" data-id="p3-ais-1"><div class="resource-info"><span class="resource-name"><strong><a href="https://atlas.mitre.org/" target="_blank">MITRE ATLAS</a></strong> — ATT&CK for AI</span><div class="resource-meta">~20 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-ais-2"><div class="resource-info"><span class="resource-name"><strong><a href="https://genai.owasp.org/llm-top-10/" target="_blank">OWASP Top 10 for LLMs 2025</a></strong></span><div class="resource-meta">~15 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-ais-3"><div class="resource-info"><span class="resource-name"><strong><a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank">NIST AI RMF 1.0</a></strong></span><div class="resource-meta">~10 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-ais-4"><div class="resource-info"><span class="resource-name"><a href="https://artificialintelligenceact.eu/" target="_blank">EU AI Act</a></span><div class="resource-meta">~5 hours</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-ais-5"><div class="resource-info"><span class="resource-name"><a href="https://www.iso.org/standard/81230.html" target="_blank">ISO/IEC 42001</a> — AI Management Standard</span><div class="resource-meta">~3 hours</div></div></li>
+          </ul>
+          <p class="subsection-desc" style="margin-top:15px"><strong>LLM Security Labs (beginner → advanced):</strong></p>
+          <ul class="resource-list">
+            <li class="resource-item"><input type="checkbox" data-id="p3-lab-1"><div class="resource-info"><span class="resource-name"><a href="https://gandalf.lakera.ai/" target="_blank">1. Gandalf — Prompt Injection Game</a></span><div class="resource-meta">Beginner</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-lab-2"><div class="resource-info"><span class="resource-name"><a href="https://portswigger.net/web-security/llm-attacks" target="_blank">2. PortSwigger — LLM Attack Labs</a></span><div class="resource-meta">Beginner</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-lab-3"><div class="resource-info"><span class="resource-name"><a href="https://github.com/dhammon/ai-goat" target="_blank">3. AI Goat — Local LLM CTF</a></span><div class="resource-meta">Intermediate</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-lab-4"><div class="resource-info"><span class="resource-name"><a href="https://genai.owasp.org/resource/finbot-agentic-ai-capture-the-flag-ctf-application/" target="_blank">4. OWASP FinBot CTF</a></span><div class="resource-meta">Intermediate</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-lab-5"><div class="resource-info"><span class="resource-name"><a href="https://github.com/WithSecureLabs/damn-vulnerable-llm-agent" target="_blank">5. Damn Vulnerable LLM Agent</a></span><div class="resource-meta">Advanced</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-lab-6"><div class="resource-info"><span class="resource-name"><a href="https://github.com/microsoft/AI-Red-Teaming-Playground-Labs" target="_blank">6. Microsoft AI Red Teaming Playground</a></span><div class="resource-meta">Advanced</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-lab-7"><div class="resource-info"><span class="resource-name"><a href="https://github.com/harishsg993010/damn-vulnerable-mcp-server" target="_blank">7. Damn Vulnerable MCP Server</a></span><div class="resource-meta">Advanced</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p3-lab-8"><div class="resource-info"><span class="resource-name"><a href="https://github.com/BishopFox/local-llm-ctf" target="_blank">8. Bishop Fox Local LLM CTF</a></span><div class="resource-meta">Advanced</div></div></li>
+          </ul>
+          <div class="notes-area">
+            <button class="notes-toggle" data-notes="p3-ais" onclick="toggleNotes(this)">+ Notes</button>
+            <div class="notes-editor" data-notes="p3-ais"><textarea data-notes="p3-ais" placeholder="Your AI security core notes..."></textarea><div class="notes-hint">Auto-saved to your browser</div></div>
+          </div>
+        </div>
+
+        <!-- Phase 3 Milestones -->
+        <div class="milestone-box">
+          <h4>Phase 3 Milestone Checklist</h4>
+          <div class="milestone-item"><input type="checkbox" data-id="m3-1"><label>Deep skills in chosen track (offensive / defensive / cloud)</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m3-2"><label>Can use MITRE ATLAS to threat-model an AI system</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m3-3"><label>Can test LLM apps for all OWASP Top 10 for LLMs risks</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m3-4"><label>Understand adversarial ML attacks (evasion, poisoning, extraction)</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m3-5"><label>Completed 5+ AI security CTFs</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m3-6"><label>Can use 3+ AI security tools (Garak, Promptfoo, ART, etc.)</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m3-7"><label>Know NIST AI RMF, EU AI Act basics</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m3-8"><label>Have CAISP certification (or scheduled)</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m3-9"><label>Have 1+ track-specific cert (OSCP / CySA+ / AWS Sec / AZ-500)</label></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PHASE 4 ===================== -->
+    <div class="phase" data-phase="4">
+      <button class="phase-toggle" onclick="togglePhase(this)">
+        <h2>Phase 4: Advanced + Career Launch (Months 12-18)</h2>
+        <div class="phase-meta">
+          <span class="phase-pct" id="p4-toggle-pct">0%</span>
+          <span class="arrow">▸</span>
+        </div>
+      </button>
+      <div class="phase-content">
+        <p class="phase-quote">"Prove your skills, build your brand, get hired"</p>
+
+        <!-- 4.1 Portfolio Projects -->
+        <div class="subsection">
+          <h3>4.1 — Portfolio Projects (Build 3-5)</h3>
+          <ul class="resource-list">
+            <li class="resource-item"><input type="checkbox" data-id="p4-proj-1"><div class="resource-info"><span class="resource-name"><strong>Netra 2.0</strong> — AI security education module with adversarial ML challenges</span><div class="resource-meta">High complexity · Full-stack + AI + security</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p4-proj-2"><div class="resource-info"><span class="resource-name"><strong>ML Network Anomaly Detector</strong> — Train model on PCAP data</span><div class="resource-meta">Medium complexity · ML + network security</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p4-proj-3"><div class="resource-info"><span class="resource-name"><strong>LLM Red-Team Report</strong> — Test a public AI chatbot, write pentest report</span><div class="resource-meta">Medium complexity · Pentesting + AI + reporting</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p4-proj-4"><div class="resource-info"><span class="resource-name"><strong>AI Guardrails Implementation</strong> — NeMo Guardrails for LLM app</span><div class="resource-meta">Medium complexity · Defensive AI security</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p4-proj-5"><div class="resource-info"><span class="resource-name"><strong>Cloud ML Security Audit</strong> — Deploy on SageMaker, fix misconfigs</span><div class="resource-meta">High complexity · Cloud + AI + security</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p4-proj-6"><div class="resource-info"><span class="resource-name"><strong>Homelab AI SOC</strong> — AI-powered detection in Proxmox</span><div class="resource-meta">High complexity · Blue team + AI + infra</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p4-proj-7"><div class="resource-info"><span class="resource-name"><strong>MITRE ATLAS Threat Model</strong> — Threat model a real AI app</span><div class="resource-meta">Medium complexity · Governance + offensive</div></div></li>
+          </ul>
+          <div class="notes-area">
+            <button class="notes-toggle" data-notes="p4-proj" onclick="toggleNotes(this)">+ Notes</button>
+            <div class="notes-editor" data-notes="p4-proj"><textarea data-notes="p4-proj" placeholder="Your portfolio project notes..."></textarea><div class="notes-hint">Auto-saved to your browser</div></div>
+          </div>
+        </div>
+
+        <!-- 4.2 Community -->
+        <div class="subsection">
+          <h3>4.2 — Community & Brand Building</h3>
+          <ul class="resource-list">
+            <li class="resource-item"><input type="checkbox" data-id="p4-com-1"><div class="resource-info"><span class="resource-name">Write blog posts on <a href="https://medium.com/" target="_blank">Medium</a> or personal site</span><div class="resource-meta">Shows thought leadership</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p4-com-2"><div class="resource-info"><span class="resource-name"><strong><a href="https://owasp.org/slack/invite" target="_blank">Join OWASP Slack — #project-top10-llm</a></strong></span><div class="resource-meta">AI security community</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p4-com-3"><div class="resource-info"><span class="resource-name"><strong><a href="https://discord.gg/aivillage" target="_blank">Join AI Village Discord</a></strong></span><div class="resource-meta">DEF CON AI security community</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p4-com-4"><div class="resource-info"><span class="resource-name">Contribute to open-source AI security tools</span><div class="resource-meta">Shows practical skills</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p4-com-5"><div class="resource-info"><span class="resource-name"><strong><a href="https://defcon.org/" target="_blank">Attend DEF CON Singapore (April 2026)</a></strong></span><div class="resource-meta">Marina Bay Sands!</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p4-com-6"><div class="resource-info"><span class="resource-name">Present at local security meetups</span><div class="resource-meta">Build reputation</div></div></li>
+            <li class="resource-item"><input type="checkbox" data-id="p4-com-7"><div class="resource-info"><span class="resource-name">Participate in CTFs regularly on <a href="https://ctftime.org/" target="_blank">CTFtime</a></span><div class="resource-meta">Stay sharp</div></div></li>
+          </ul>
+          <div class="notes-area">
+            <button class="notes-toggle" data-notes="p4-com" onclick="toggleNotes(this)">+ Notes</button>
+            <div class="notes-editor" data-notes="p4-com"><textarea data-notes="p4-com" placeholder="Your community building notes..."></textarea><div class="notes-hint">Auto-saved to your browser</div></div>
+          </div>
+        </div>
+
+        <!-- Phase 4 Milestones -->
+        <div class="milestone-box">
+          <h4>Phase 4 Milestone Checklist</h4>
+          <div class="milestone-item"><input type="checkbox" data-id="m4-1"><label>3-5 portfolio projects completed</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m4-2"><label>Active blog / content published</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m4-3"><label>Engaged in OWASP / AI Village communities</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m4-4"><label>Attended DEF CON Singapore</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m4-5"><label>Contributed to open-source security project</label></div>
+          <div class="milestone-item"><input type="checkbox" data-id="m4-6"><label>Presented at a meetup or conference</label></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== CERTIFICATION ROADMAP ===================== -->
+    <div class="info-section">
+      <button class="info-toggle" onclick="toggleInfo(this)">
+        <h2>Certification Roadmap</h2>
+        <span class="arrow">▸</span>
+      </button>
+      <div class="info-content">
+        <div class="cert-tier">
+          <h4>Tier 1 — Foundation (Months 1-6)</h4>
+          <div class="cert-item"><input type="checkbox" data-id="cert-sec"><div class="cert-info"><span class="cert-name"><a href="https://www.comptia.org/certifications/security" target="_blank">CompTIA Security+ (SY0-701)</a></span><div class="cert-cost">$404</div></div></div>
+          <div class="cert-item"><input type="checkbox" data-id="cert-ai900"><div class="cert-info"><span class="cert-name"><a href="https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-fundamentals/" target="_blank">Microsoft AI-900</a></span><div class="cert-cost">$165</div></div></div>
+          <div class="cert-item"><input type="checkbox" data-id="cert-awscp"><div class="cert-info"><span class="cert-name"><a href="https://aws.amazon.com/certification/certified-cloud-practitioner/" target="_blank">AWS Cloud Practitioner</a></span><div class="cert-cost">$100</div></div></div>
+          <div class="cert-item"><input type="checkbox" data-id="cert-gml"><div class="cert-info"><span class="cert-name"><a href="https://developers.google.com/machine-learning/crash-course" target="_blank">Google ML Crash Course (badge)</a></span><div class="cert-cost">FREE</div></div></div>
+          <div class="cert-item"><input type="checkbox" data-id="cert-ibmai"><div class="cert-info"><span class="cert-name"><a href="https://skillsbuild.org/students/course-catalog/artificial-intelligence" target="_blank">IBM AI Fundamentals</a></span><div class="cert-cost">FREE</div></div></div>
+        </div>
+        <div class="cert-tier">
+          <h4>Tier 2 — Specialization (Months 6-12)</h4>
+          <div class="cert-item"><input type="checkbox" data-id="cert-caisp"><div class="cert-info"><span class="cert-name"><a href="https://www.practical-devsecops.com/certified-ai-security-professional/" target="_blank">CAISP (AI Security)</a></span><div class="cert-cost">$999</div></div></div>
+          <div class="cert-item"><input type="checkbox" data-id="cert-sc900"><div class="cert-info"><span class="cert-name"><a href="https://learn.microsoft.com/en-us/credentials/certifications/security-compliance-and-identity-fundamentals/" target="_blank">Microsoft SC-900</a></span><div class="cert-cost">$165</div></div></div>
+          <div class="cert-item"><input type="checkbox" data-id="cert-isc2ai"><div class="cert-info"><span class="cert-name"><a href="https://www.isc2.org/landing/ai-security-skills" target="_blank">ISC2 Building AI Strategy Certificate</a></span><div class="cert-cost">~$700</div></div></div>
+        </div>
+        <div class="cert-tier">
+          <h4>Tier 3 — Advanced (Months 12-18)</h4>
+          <div class="cert-item"><input type="checkbox" data-id="cert-oscp"><div class="cert-info"><span class="cert-name"><a href="https://www.offsec.com/courses/pen-200/" target="_blank">OSCP (Offensive)</a></span><div class="cert-cost">$1,749</div></div></div>
+          <div class="cert-item"><input type="checkbox" data-id="cert-awssec"><div class="cert-info"><span class="cert-name"><a href="https://aws.amazon.com/certification/certified-security-specialty/" target="_blank">AWS Security Specialty</a></span><div class="cert-cost">$300</div></div></div>
+          <div class="cert-item"><input type="checkbox" data-id="cert-az500"><div class="cert-info"><span class="cert-name"><a href="https://learn.microsoft.com/en-us/credentials/certifications/azure-security-engineer/" target="_blank">Azure AZ-500</a></span><div class="cert-cost">$165</div></div></div>
+          <div class="cert-item"><input type="checkbox" data-id="cert-ccsp"><div class="cert-info"><span class="cert-name"><a href="https://www.isc2.org/certifications/ccsp" target="_blank">CCSP (Cloud)</a></span><div class="cert-cost">$599</div></div></div>
+        </div>
+        <div class="cert-tier">
+          <h4>Tier 4 — Senior (2+ years experience)</h4>
+          <div class="cert-item"><input type="checkbox" data-id="cert-cissp"><div class="cert-info"><span class="cert-name"><a href="https://www.isc2.org/certifications/cissp" target="_blank">CISSP</a></span><div class="cert-cost">$749</div></div></div>
+          <div class="cert-item"><input type="checkbox" data-id="cert-aaism"><div class="cert-info"><span class="cert-name"><a href="https://www.isaca.org/credentialing/aaism" target="_blank">ISACA AAISM (AI Security Management)</a></span><div class="cert-cost">~$500+</div></div></div>
+          <div class="cert-item"><input type="checkbox" data-id="cert-sc100"><div class="cert-info"><span class="cert-name"><a href="https://learn.microsoft.com/en-us/credentials/certifications/cybersecurity-architect-expert/" target="_blank">Microsoft SC-100</a></span><div class="cert-cost">$165</div></div></div>
+        </div>
+        <div class="notes-area">
+          <button class="notes-toggle" data-notes="certs" onclick="toggleNotes(this)">+ Notes</button>
+          <div class="notes-editor" data-notes="certs"><textarea data-notes="certs" placeholder="Your certification planning notes..."></textarea><div class="notes-hint">Auto-saved to your browser</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== QUICK WINS ===================== -->
+    <div class="info-section">
+      <button class="info-toggle" onclick="toggleInfo(this)">
+        <h2>Quick Wins — Start This Week</h2>
+        <span class="arrow">▸</span>
+      </button>
+      <div class="info-content">
+        <ul class="resource-list quick-wins">
+          <li class="resource-item"><input type="checkbox" data-id="qw-1"><div class="resource-info"><span class="resource-name"><a href="https://gandalf.lakera.ai/" target="_blank">Play Gandalf</a> — 15 min, instant AI security experience</span></div></li>
+          <li class="resource-item"><input type="checkbox" data-id="qw-2"><div class="resource-info"><span class="resource-name"><a href="https://tryhackme.com/" target="_blank">Sign up for TryHackMe</a> — start Pre-Security path</span></div></li>
+          <li class="resource-item"><input type="checkbox" data-id="qw-3"><div class="resource-info"><span class="resource-name">Bookmark <a href="https://attack.mitre.org/" target="_blank">MITRE ATT&CK</a> + <a href="https://atlas.mitre.org/" target="_blank">MITRE ATLAS</a></span></div></li>
+          <li class="resource-item"><input type="checkbox" data-id="qw-4"><div class="resource-info"><span class="resource-name">Bookmark <a href="https://genai.owasp.org/llm-top-10/" target="_blank">OWASP LLM Top 10</a></span></div></li>
+          <li class="resource-item"><input type="checkbox" data-id="qw-5"><div class="resource-info"><span class="resource-name">Start <a href="https://www.professormesser.com/" target="_blank">Professor Messer Security+</a> free videos</span></div></li>
+          <li class="resource-item"><input type="checkbox" data-id="qw-6"><div class="resource-info"><span class="resource-name">Enroll in <a href="https://www.elementsofai.com/" target="_blank">Elements of AI</a></span></div></li>
+          <li class="resource-item"><input type="checkbox" data-id="qw-7"><div class="resource-info"><span class="resource-name"><a href="https://owasp.org/slack/invite" target="_blank">Join OWASP Slack</a> — #project-top10-llm</span></div></li>
+          <li class="resource-item"><input type="checkbox" data-id="qw-8"><div class="resource-info"><span class="resource-name"><a href="https://discord.gg/aivillage" target="_blank">Join AI Village Discord</a></span></div></li>
+          <li class="resource-item"><input type="checkbox" data-id="qw-9"><div class="resource-info"><span class="resource-name">Check <a href="https://defcon.org/" target="_blank">DEF CON Singapore</a> tickets (April 2026, MBS)</span></div></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===================== BOOKS ===================== -->
+    <div class="info-section">
+      <button class="info-toggle" onclick="toggleInfo(this)">
+        <h2>The Essential Shelf</h2>
+        <span class="arrow">▸</span>
+      </button>
+      <div class="info-content">
+        <p class="subsection-desc"><strong>Cybersecurity Core:</strong></p>
+        <ul class="resource-list">
+          <li class="resource-item"><input type="checkbox" data-id="book-1"><div class="resource-info"><span class="resource-name">The Web Application Hacker's Handbook — Stuttard & Pinto</span></div></li>
+          <li class="resource-item"><input type="checkbox" data-id="book-2"><div class="resource-info"><span class="resource-name"><a href="https://www.cl.cam.ac.uk/~rja14/book.html" target="_blank">Security Engineering (3rd Ed)</a> — Ross Anderson (FREE)</span></div></li>
+          <li class="resource-item"><input type="checkbox" data-id="book-3"><div class="resource-info"><span class="resource-name">Practical Malware Analysis — Sikorski & Honig</span></div></li>
+          <li class="resource-item"><input type="checkbox" data-id="book-4"><div class="resource-info"><span class="resource-name">The Hacker Playbook 3 — Peter Kim</span></div></li>
+          <li class="resource-item"><input type="checkbox" data-id="book-5"><div class="resource-info"><span class="resource-name">Blue Team Handbook — Don Murdoch</span></div></li>
+        </ul>
+        <p class="subsection-desc" style="margin-top:15px"><strong>AI Security:</strong></p>
+        <ul class="resource-list">
+          <li class="resource-item"><input type="checkbox" data-id="book-6"><div class="resource-info"><span class="resource-name">Not with a Bug, But with a Sticker — Kumar & Anderson</span></div></li>
+          <li class="resource-item"><input type="checkbox" data-id="book-7"><div class="resource-info"><span class="resource-name">Hands-On Machine Learning (3rd Ed) — Aurélien Géron</span></div></li>
+          <li class="resource-item"><input type="checkbox" data-id="book-8"><div class="resource-info"><span class="resource-name"><a href="https://www.deeplearningbook.org/" target="_blank">Deep Learning</a> — Goodfellow, Bengio, Courville (FREE)</span></div></li>
+          <li class="resource-item"><input type="checkbox" data-id="book-9"><div class="resource-info"><span class="resource-name"><a href="https://mml-book.github.io/" target="_blank">Mathematics for Machine Learning</a> — (FREE)</span></div></li>
+          <li class="resource-item"><input type="checkbox" data-id="book-10"><div class="resource-info"><span class="resource-name">The Alignment Problem — Brian Christian</span></div></li>
+        </ul>
+        <div class="notes-area">
+          <button class="notes-toggle" data-notes="books" onclick="toggleNotes(this)">+ Notes</button>
+          <div class="notes-editor" data-notes="books"><textarea data-notes="books" placeholder="Your reading notes..."></textarea><div class="notes-hint">Auto-saved to your browser</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== GENERAL NOTES ===================== -->
+    <div class="info-section">
+      <button class="info-toggle" onclick="toggleInfo(this)">
+        <h2>General Study Notes</h2>
+        <span class="arrow">▸</span>
+      </button>
+      <div class="info-content">
+        <div class="notes-editor open" style="margin:0">
+          <textarea data-notes="general" placeholder="Your general study notes, thoughts, plans, weekly reflections..." style="min-height:200px"></textarea>
+          <div class="notes-hint">Auto-saved to your browser</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Controls -->
+    <div class="data-controls">
+      <button class="data-btn" onclick="exportData()">Export Progress</button>
+      <button class="data-btn" onclick="importData()">Import Progress</button>
+      <button class="data-btn danger" onclick="resetData()">Reset All</button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="project-nav">
+      <a href="../library.html" class="prev">Back to Library</a>
+      <a href="homelab.html" class="next">Volume I: Homelab</a>
+    </nav>
+  </div>
+
+  <script>
+    // ===== State Management =====
+    const STORAGE_KEY = 'study_progress';
+    const NOTES_KEY = 'study_notes';
+
+    function loadChecks() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
+    }
+    function saveChecks(data) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+    function loadNotes() {
+      try { return JSON.parse(localStorage.getItem(NOTES_KEY)) || {}; } catch { return {}; }
+    }
+    function saveNotes(data) {
+      localStorage.setItem(NOTES_KEY, JSON.stringify(data));
+    }
+
+    // ===== Initialize =====
+    function init() {
+      const checks = loadChecks();
+      const notes = loadNotes();
+
+      // Restore checkboxes
+      document.querySelectorAll('input[type="checkbox"][data-id]').forEach(cb => {
+        const id = cb.dataset.id;
+        cb.checked = !!checks[id];
+        updateItemVisual(cb);
+        cb.addEventListener('change', () => {
+          const data = loadChecks();
+          data[id] = cb.checked;
+          saveChecks(data);
+          updateItemVisual(cb);
+          updateProgress();
+        });
+      });
+
+      // Restore notes
+      document.querySelectorAll('textarea[data-notes]').forEach(ta => {
+        const key = ta.dataset.notes;
+        if (notes[key]) {
+          ta.value = notes[key];
+          // Mark toggle as has-notes
+          const toggle = document.querySelector(`button.notes-toggle[data-notes="${key}"]`);
+          if (toggle) toggle.classList.add('has-notes');
+        }
+        let timeout;
+        ta.addEventListener('input', () => {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => {
+            const data = loadNotes();
+            data[key] = ta.value;
+            if (!ta.value.trim()) delete data[key];
+            saveNotes(data);
+            const toggle = document.querySelector(`button.notes-toggle[data-notes="${key}"]`);
+            if (toggle) toggle.classList.toggle('has-notes', !!ta.value.trim());
+            updateProgress();
+          }, 300);
+        });
+      });
+
+      updateProgress();
+    }
+
+    function updateItemVisual(cb) {
+      const item = cb.closest('.resource-item') || cb.closest('.milestone-item') || cb.closest('.cert-item');
+      if (item) item.classList.toggle('completed', cb.checked);
+    }
+
+    // ===== Progress Tracking =====
+    function countChecked(prefix) {
+      const checks = loadChecks();
+      let total = 0, done = 0;
+      document.querySelectorAll(`input[type="checkbox"][data-id^="${prefix}"]`).forEach(() => total++);
+      document.querySelectorAll(`input[type="checkbox"][data-id^="${prefix}"]`).forEach(cb => {
+        if (checks[cb.dataset.id]) done++;
+      });
+      return { total, done };
+    }
+
+    function countPhase(phaseNum) {
+      const checks = loadChecks();
+      let total = 0, done = 0;
+      const phase = document.querySelector(`.phase[data-phase="${phaseNum}"]`);
+      if (!phase) return { total: 0, done: 0 };
+      phase.querySelectorAll('input[type="checkbox"][data-id]').forEach(cb => {
+        total++;
+        if (checks[cb.dataset.id]) done++;
+      });
+      return { total, done };
+    }
+
+    function updateProgress() {
+      const checks = loadChecks();
+      const notes = loadNotes();
+
+      // Phase progress
+      for (let i = 1; i <= 4; i++) {
+        const { total, done } = countPhase(i);
+        const pct = total ? Math.round((done / total) * 100) : 0;
+        const fill = document.getElementById(`p${i}-fill`);
+        const label = document.getElementById(`p${i}-pct`);
+        const togglePct = document.getElementById(`p${i}-toggle-pct`);
+        if (fill) fill.style.width = pct + '%';
+        if (label) label.textContent = pct + '%';
+        if (togglePct) togglePct.textContent = pct + '%';
+      }
+
+      // Overall
+      let allTotal = 0, allDone = 0;
+      document.querySelectorAll('input[type="checkbox"][data-id]').forEach(cb => {
+        allTotal++;
+        if (checks[cb.dataset.id]) allDone++;
+      });
+      const overallPct = allTotal ? Math.round((allDone / allTotal) * 100) : 0;
+      document.getElementById('overall-fill').style.width = overallPct + '%';
+      document.getElementById('overall-pct').textContent = overallPct + '%';
+
+      // Stats
+      let resources = 0, milestones = 0, certs = 0;
+      document.querySelectorAll('.resource-item input[type="checkbox"][data-id]').forEach(cb => {
+        if (checks[cb.dataset.id]) resources++;
+      });
+      document.querySelectorAll('.milestone-item input[type="checkbox"][data-id]').forEach(cb => {
+        if (checks[cb.dataset.id]) milestones++;
+      });
+      document.querySelectorAll('.cert-item input[type="checkbox"][data-id]').forEach(cb => {
+        if (checks[cb.dataset.id]) certs++;
+      });
+      const noteCount = Object.values(notes).filter(v => v && v.trim()).length;
+
+      document.getElementById('stat-resources').textContent = resources;
+      document.getElementById('stat-milestones').textContent = milestones;
+      document.getElementById('stat-certs').textContent = certs;
+      document.getElementById('stat-notes').textContent = noteCount;
+    }
+
+    // ===== UI Toggles =====
+    function togglePhase(btn) {
+      btn.closest('.phase').classList.toggle('open');
+    }
+    function toggleInfo(btn) {
+      btn.closest('.info-section').classList.toggle('open');
+    }
+    function toggleNotes(btn) {
+      const key = btn.dataset.notes;
+      const editor = btn.nextElementSibling;
+      editor.classList.toggle('open');
+      btn.textContent = editor.classList.contains('open') ? '- Notes' : '+ Notes';
+    }
+
+    // ===== Data Export / Import / Reset =====
+    function exportData() {
+      const data = {
+        checks: loadChecks(),
+        notes: loadNotes(),
+        exportDate: new Date().toISOString()
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `study-progress-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importData() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          try {
+            const data = JSON.parse(ev.target.result);
+            if (data.checks) saveChecks(data.checks);
+            if (data.notes) saveNotes(data.notes);
+            location.reload();
+          } catch {
+            alert('Invalid file format');
+          }
+        };
+        reader.readAsText(file);
+      };
+      input.click();
+    }
+
+    function resetData() {
+      if (confirm('Reset ALL progress and notes? This cannot be undone.')) {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(NOTES_KEY);
+        location.reload();
+      }
+    }
+
+    // Boot
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

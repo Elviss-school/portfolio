@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Volume III: The Curriculum - The Library</title>
+  <title>03: The Curriculum - The Troop</title>
   <link rel="stylesheet" href="../css/styles.css">
   <style>
     .project-container {
@@ -14,61 +14,72 @@
       z-index: 1;
     }
 
-    /* Book cover header */
+    /* Project cover header - Chimp theme */
     .book-cover {
-      background: linear-gradient(135deg, #2d4a3e 0%, #1f362c 50%, #15261f 100%);
+      background: linear-gradient(135deg, #1b3a1b 0%, #2d4a2d 50%, #1b3a1b 100%);
       padding: 60px 40px;
       text-align: center;
       margin-bottom: 40px;
       position: relative;
-      box-shadow: 5px 5px 20px rgba(44, 36, 22, 0.4), inset -5px 0 20px rgba(0,0,0,0.2);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
     }
     .book-cover::before {
       content: '';
       position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 30px;
-      background: linear-gradient(to right, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url('../images/chimp_1.png');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.08;
     }
     .book-cover::after {
       content: '';
       position: absolute;
-      left: 12px; top: 20px; bottom: 20px;
-      width: 3px;
-      background: rgba(212, 175, 55, 0.3);
-      box-shadow: 5px 0 0 rgba(212, 175, 55, 0.15);
+      bottom: 0; left: 0; right: 0;
+      height: 50%;
+      background: linear-gradient(to top, #1b3a1b, transparent);
     }
     .book-cover .volume-number {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1rem;
-      color: rgba(212, 175, 55, 0.7);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.9rem;
+      color: rgba(102, 187, 106, 0.6);
       letter-spacing: 0.3em;
       margin-bottom: 15px;
       text-transform: uppercase;
+      position: relative;
+      z-index: 2;
     }
     .book-cover h1 {
-      color: #d4af37;
+      color: var(--vine);
       font-size: 2.6rem;
       margin-bottom: 10px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      position: relative;
+      z-index: 2;
     }
     .book-cover .subtitle {
-      color: #c4a87c;
+      color: rgba(165, 214, 167, 0.7);
       font-style: italic;
       font-size: 1.15rem;
       margin-bottom: 5px;
+      position: relative;
+      z-index: 2;
     }
     .book-cover .author {
-      color: rgba(196, 168, 124, 0.6);
+      color: rgba(165, 214, 167, 0.4);
       font-size: 0.9rem;
       margin-top: 10px;
       font-family: 'IBM Plex Mono', monospace;
+      position: relative;
+      z-index: 2;
     }
 
     /* Progress Dashboard */
     .dashboard {
-      background: var(--parchment-dark);
+      background: var(--jungle-mid);
       border: 1px solid var(--border);
+      border-radius: 8px;
       padding: 30px;
       margin-bottom: 40px;
     }
@@ -86,17 +97,17 @@
       margin-bottom: 6px;
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 1rem;
-      color: var(--ink-light);
+      color: rgba(232, 224, 204, 0.7);
     }
     .progress-bar {
       height: 12px;
-      background: var(--parchment);
+      background: var(--jungle);
       border: 1px solid var(--border);
       overflow: hidden;
     }
     .progress-fill {
       height: 100%;
-      background: linear-gradient(to right, #2d4a3e, #4a7c68);
+      background: linear-gradient(to right, #2d4a2d, #66bb6a);
       transition: width 0.4s ease;
       width: 0%;
     }
@@ -125,12 +136,12 @@
     .stat-number {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 1.8rem;
-      color: var(--ink);
+      color: var(--sand);
       display: block;
     }
     .stat-label {
       font-size: 0.8rem;
-      color: var(--ink-faded);
+      color: rgba(232, 224, 204, 0.4);
       font-family: 'IBM Plex Mono', monospace;
     }
 
@@ -151,7 +162,7 @@
       text-align: left;
     }
     .phase-toggle:hover {
-      border-color: var(--ink-faded);
+      border-color: rgba(232, 224, 204, 0.4);
     }
     .phase-toggle h2 {
       margin: 0;
@@ -167,11 +178,11 @@
     .phase-toggle .phase-pct {
       font-family: 'IBM Plex Mono', monospace;
       font-size: 0.9rem;
-      color: var(--ink-faded);
+      color: rgba(232, 224, 204, 0.4);
     }
     .phase-toggle .arrow {
       font-size: 1.2rem;
-      color: var(--ink-faded);
+      color: rgba(232, 224, 204, 0.4);
       transition: transform 0.3s;
     }
     .phase.open .phase-toggle .arrow {
@@ -186,7 +197,7 @@
     }
     .phase-quote {
       font-style: italic;
-      color: var(--ink-faded);
+      color: rgba(232, 224, 204, 0.4);
       margin-bottom: 25px;
       padding-left: 20px;
       border-left: 2px solid var(--border);
@@ -199,28 +210,28 @@
     .subsection h3 {
       font-size: 1.25rem;
       margin-bottom: 8px;
-      color: var(--ink);
+      color: var(--sand);
     }
     .subsection-desc {
       margin-bottom: 5px;
       font-size: 1rem;
     }
     .subsection-desc strong {
-      color: var(--ink);
+      color: var(--sand);
     }
     .ai-layer {
-      background: rgba(45, 74, 62, 0.06);
-      border-left: 3px solid #2d4a3e;
+      background: rgba(102, 187, 106, 0.06);
+      border-left: 3px solid var(--vine);
       padding: 10px 15px;
       margin: 10px 0 15px;
       font-size: 0.95rem;
-      color: var(--ink-light);
+      color: rgba(232, 224, 204, 0.7);
     }
     .ai-layer::before {
       content: 'AI Layer: ';
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-weight: 600;
-      color: #2d4a3e;
+      color: var(--vine);
     }
 
     /* Resource checklist */
@@ -234,7 +245,7 @@
       align-items: flex-start;
       gap: 10px;
       padding: 8px 0;
-      border-bottom: 1px solid rgba(196, 184, 156, 0.3);
+      border-bottom: 1px solid rgba(102, 187, 106, 0.1);
     }
     .resource-item:last-child {
       border-bottom: none;
@@ -246,15 +257,15 @@
       height: 18px;
       min-width: 18px;
       border: 2px solid var(--border);
-      background: var(--parchment);
+      background: var(--jungle);
       cursor: pointer;
       margin-top: 3px;
       position: relative;
       transition: all 0.2s;
     }
     .resource-item input[type="checkbox"]:checked {
-      background: #2d4a3e;
-      border-color: #2d4a3e;
+      background: var(--vine);
+      border-color: var(--vine);
     }
     .resource-item input[type="checkbox"]:checked::after {
       content: '✓';
@@ -262,7 +273,7 @@
       top: -1px;
       left: 2px;
       font-size: 13px;
-      color: #d4af37;
+      color: var(--jungle);
       font-weight: bold;
     }
     .resource-item.completed .resource-info {
@@ -277,25 +288,25 @@
     .resource-name {
       font-family: 'Lora', Georgia, serif;
       font-size: 1rem;
-      color: var(--ink);
+      color: var(--sand);
     }
     .resource-name a {
-      color: var(--accent);
+      color: var(--vine);
     }
     .resource-name a:hover {
-      color: var(--ink);
+      color: var(--sand);
       text-decoration: underline;
     }
     .resource-meta {
       font-family: 'IBM Plex Mono', monospace;
       font-size: 0.75rem;
-      color: var(--ink-faded);
+      color: rgba(232, 224, 204, 0.4);
       margin-top: 2px;
     }
 
     /* Milestone checklist */
     .milestone-box {
-      background: var(--parchment-dark);
+      background: var(--jungle-mid);
       border: 1px solid var(--border);
       padding: 20px 25px;
       margin: 20px 0;
@@ -304,7 +315,7 @@
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 1.15rem;
       margin-bottom: 15px;
-      color: var(--ink);
+      color: var(--sand);
     }
     .milestone-item {
       display: flex;
@@ -326,8 +337,8 @@
       transition: all 0.2s;
     }
     .milestone-item input[type="checkbox"]:checked {
-      background: #2d4a3e;
-      border-color: #2d4a3e;
+      background: var(--vine);
+      border-color: var(--vine);
     }
     .milestone-item input[type="checkbox"]:checked::after {
       content: '✓';
@@ -335,12 +346,12 @@
       top: -2px;
       left: 1px;
       font-size: 12px;
-      color: #d4af37;
+      color: var(--jungle);
       font-weight: bold;
     }
     .milestone-item label {
       font-size: 0.95rem;
-      color: var(--ink-light);
+      color: rgba(232, 224, 204, 0.7);
       cursor: pointer;
     }
     .milestone-item.completed label {
@@ -355,7 +366,7 @@
     .notes-toggle {
       background: none;
       border: 1px dashed var(--border);
-      color: var(--ink-faded);
+      color: rgba(232, 224, 204, 0.4);
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 0.9rem;
       padding: 6px 15px;
@@ -363,13 +374,13 @@
       transition: all 0.3s;
     }
     .notes-toggle:hover {
-      border-color: var(--ink-faded);
-      color: var(--ink-light);
+      border-color: rgba(232, 224, 204, 0.4);
+      color: rgba(232, 224, 204, 0.7);
     }
     .notes-toggle.has-notes {
       border-style: solid;
-      color: var(--ink-light);
-      background: rgba(45, 74, 62, 0.05);
+      color: var(--vine);
+      background: rgba(102, 187, 106, 0.08);
     }
     .notes-editor {
       display: none;
@@ -381,22 +392,22 @@
     .notes-editor textarea {
       width: 100%;
       min-height: 80px;
-      background: var(--parchment);
+      background: var(--jungle);
       border: 1px solid var(--border);
       padding: 12px;
       font-family: 'Lora', Georgia, serif;
       font-size: 0.95rem;
-      color: var(--ink);
+      color: var(--sand);
       resize: vertical;
       line-height: 1.6;
     }
     .notes-editor textarea:focus {
       outline: none;
-      border-color: var(--ink-faded);
+      border-color: rgba(232, 224, 204, 0.4);
     }
     .notes-editor .notes-hint {
       font-size: 0.75rem;
-      color: var(--ink-faded);
+      color: rgba(232, 224, 204, 0.4);
       font-family: 'IBM Plex Mono', monospace;
       margin-top: 4px;
     }
@@ -408,7 +419,7 @@
     .cert-tier h4 {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 1.1rem;
-      color: var(--ink);
+      color: var(--sand);
       margin-bottom: 10px;
       padding-bottom: 5px;
       border-bottom: 1px solid var(--border);
@@ -426,21 +437,21 @@
       height: 16px;
       min-width: 16px;
       border: 2px solid var(--border);
-      background: var(--parchment);
+      background: var(--jungle);
       cursor: pointer;
       margin-top: 3px;
       position: relative;
     }
     .cert-item input[type="checkbox"]:checked {
-      background: #2d4a3e;
-      border-color: #2d4a3e;
+      background: var(--vine);
+      border-color: var(--vine);
     }
     .cert-item input[type="checkbox"]:checked::after {
       content: '✓';
       position: absolute;
       top: -2px; left: 1px;
       font-size: 12px;
-      color: #d4af37;
+      color: var(--jungle);
       font-weight: bold;
     }
     .cert-info {
@@ -448,36 +459,37 @@
     }
     .cert-name {
       font-size: 0.95rem;
-      color: var(--ink);
+      color: var(--sand);
     }
     .cert-name a {
-      color: var(--accent);
+      color: var(--vine);
     }
     .cert-cost {
       font-family: 'IBM Plex Mono', monospace;
       font-size: 0.75rem;
-      color: var(--ink-faded);
+      color: rgba(232, 224, 204, 0.4);
     }
 
     /* Hands-on box */
     .hands-on {
-      background: rgba(45, 74, 62, 0.04);
-      border: 1px solid rgba(45, 74, 62, 0.2);
+      background: rgba(102, 187, 106, 0.05);
+      border: 1px solid rgba(102, 187, 106, 0.15);
+      border-radius: 6px;
       padding: 12px 18px;
       margin: 10px 0;
       font-size: 0.95rem;
-      color: var(--ink-light);
+      color: rgba(232, 224, 204, 0.7);
     }
     .hands-on::before {
       content: 'Hands-on: ';
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-weight: 600;
-      color: #2d4a3e;
+      color: var(--vine);
     }
 
     /* Quick wins */
     .quick-wins .resource-item {
-      border-bottom: 1px solid rgba(196, 184, 156, 0.2);
+      border-bottom: 1px solid rgba(102, 187, 106, 0.08);
     }
 
     /* Collapsible table sections */
@@ -502,7 +514,7 @@
     }
     .info-toggle .arrow {
       font-size: 1.2rem;
-      color: var(--ink-faded);
+      color: rgba(232, 224, 204, 0.4);
       transition: transform 0.3s;
     }
     .info-section.open .info-toggle .arrow {
@@ -527,21 +539,21 @@
       text-align: left;
       padding: 8px 12px;
       border-bottom: 2px solid var(--border);
-      color: var(--ink);
+      color: var(--sand);
       font-weight: 400;
     }
     .career-table td {
       padding: 8px 12px;
-      border-bottom: 1px solid rgba(196, 184, 156, 0.3);
+      border-bottom: 1px solid rgba(102, 187, 106, 0.1);
       font-size: 0.95rem;
-      color: var(--ink-light);
+      color: rgba(232, 224, 204, 0.7);
     }
     .career-table caption {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 1.05rem;
       text-align: left;
       padding: 10px 0;
-      color: var(--ink);
+      color: var(--sand);
     }
 
     /* Reset / Export buttons */
@@ -559,17 +571,17 @@
       padding: 6px 15px;
       border: 1px solid var(--border);
       background: transparent;
-      color: var(--ink-faded);
+      color: rgba(232, 224, 204, 0.4);
       cursor: pointer;
       transition: all 0.3s;
     }
     .data-btn:hover {
-      border-color: var(--ink-faded);
-      color: var(--ink-light);
+      border-color: rgba(232, 224, 204, 0.4);
+      color: rgba(232, 224, 204, 0.7);
     }
     .data-btn.danger:hover {
-      border-color: #722f37;
-      color: #722f37;
+      border-color: #ef5350;
+      color: #ef5350;
     }
 
     /* Navigation */
@@ -595,12 +607,12 @@
   </style>
 </head>
 <body>
-  <a href="../library.html" class="nav-back">Return to Library</a>
+  <a href="../library.html" class="nav-back">Return to Troop</a>
 
   <div class="project-container container">
     <!-- Book Cover -->
     <header class="book-cover">
-      <p class="volume-number">Volume III</p>
+      <p class="volume-number">Territory 03</p>
       <h1>The Curriculum</h1>
       <p class="subtitle">Cybersecurity Career Path with AI Specialization</p>
       <p class="author">18-Month Complete Future-Proof Curriculum</p>
@@ -1171,8 +1183,8 @@
 
     <!-- Navigation -->
     <nav class="project-nav">
-      <a href="../library.html" class="prev">Back to Library</a>
-      <a href="homelab.html" class="next">Volume I: Homelab</a>
+      <a href="../library.html" class="prev">Back to Troop</a>
+      <a href="homelab.html" class="next">Project 01: Homelab</a>
     </nav>
   </div>
 

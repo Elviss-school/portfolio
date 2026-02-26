@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- CHANGE: Update title -->
-  <title>Volume X: PROJECT_NAME - The Library</title>
+  <title>0X: PROJECT_NAME - The Troop</title>
   <link rel="stylesheet" href="../css/styles.css">
   <style>
     .project-container {
@@ -15,71 +15,70 @@
       z-index: 1;
     }
 
-    /* Book cover header */
-    .book-cover {
-      /* CHANGE: Pick a color theme:
-         - burgundy: #722f37, #5c252c, #461c22
-         - navy:     #1e3a5f, #152a45, #0f1f33
-         - green:    #2d4a3e, #1f362c, #15261f
-         - purple:   #4a3060, #362248, #261835
-         - brown:    #8b4513, #654321, #4a3520
+    /* Project cover header */
+    .project-cover {
+      /* CHANGE: Pick a primate theme:
+         - gorilla:    #1a1a1a, #2d2d2d (dark grays) — image: gorilla_1.png
+         - orangutan:  #3e2723, #4e342e (warm browns) — image: orangutan_1.png
+         - chimp:      #1b3a1b, #2d4a2d (deep greens) — image: chimp_1.png
+         - mandrill:   #1a1a3e, #2d2d5a (deep blues)  — image: mandrill_1.png
+         - lemur:      #3e1a3e, #4e2d4e (purples)     — image: lemur_1.png
       */
-      background: linear-gradient(135deg, #722f37 0%, #5c252c 50%, #461c22 100%);
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
       padding: 60px 40px;
       text-align: center;
       margin-bottom: 50px;
       position: relative;
-      box-shadow:
-        5px 5px 20px rgba(44, 36, 22, 0.4),
-        inset -5px 0 20px rgba(0,0,0,0.2);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
     }
 
-    .book-cover::before {
+    .project-cover::before {
       content: '';
       position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 30px;
-      background: linear-gradient(
-        to right,
-        rgba(0,0,0,0.4) 0%,
-        rgba(0,0,0,0.1) 50%,
-        transparent 100%
-      );
+      top: 0; left: 0; right: 0; bottom: 0;
+      /* CHANGE: Update image to match primate theme */
+      background-image: url('../images/gorilla_1.png');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.1;
     }
 
-    .book-cover::after {
+    .project-cover::after {
       content: '';
       position: absolute;
-      left: 12px;
-      top: 20px;
-      bottom: 20px;
-      width: 3px;
-      background: rgba(212, 175, 55, 0.3);
-      box-shadow: 5px 0 0 rgba(212, 175, 55, 0.15);
+      bottom: 0; left: 0; right: 0;
+      height: 50%;
+      /* CHANGE: Match gradient color to cover background */
+      background: linear-gradient(to top, #1a1a1a, transparent);
     }
 
-    .book-cover .volume-number {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1rem;
-      color: rgba(212, 175, 55, 0.7);
+    .project-cover .project-number {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.9rem;
+      color: rgba(224, 224, 224, 0.5);
       letter-spacing: 0.3em;
       margin-bottom: 15px;
       text-transform: uppercase;
+      position: relative;
+      z-index: 2;
     }
 
-    .book-cover h1 {
-      color: #d4af37;
+    .project-cover h1 {
+      color: #e0e0e0;
       font-size: 3rem;
       margin-bottom: 15px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      position: relative;
+      z-index: 2;
     }
 
-    .book-cover .subtitle {
-      color: #c4a87c;
+    .project-cover .subtitle {
+      color: rgba(224, 224, 224, 0.6);
       font-style: italic;
       font-size: 1.2rem;
+      position: relative;
+      z-index: 2;
     }
 
     .project-tags {
@@ -87,12 +86,8 @@
       justify-content: center;
       gap: 10px;
       margin-top: 25px;
-      flex-wrap: wrap;
-    }
-
-    .project-tags .tag {
-      background: rgba(0,0,0,0.3);
-      border-color: rgba(212, 175, 55, 0.3);
+      position: relative;
+      z-index: 2;
     }
 
     /* Content sections */
@@ -108,8 +103,8 @@
     }
 
     .chapter-number {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 2.5rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1.8rem;
       color: var(--border);
       line-height: 1;
     }
@@ -132,14 +127,15 @@
       position: relative;
       padding-left: 25px;
       margin-bottom: 12px;
-      color: var(--ink-light);
+      color: rgba(232, 224, 204, 0.7);
     }
 
     .chapter li::before {
-      content: '~';
+      content: '>';
       position: absolute;
       left: 0;
-      color: var(--ink-faded);
+      color: var(--vine);
+      font-family: 'IBM Plex Mono', monospace;
     }
 
     /* Tech stack display */
@@ -151,8 +147,9 @@
     }
 
     .tech-item {
-      background: var(--parchment-dark);
+      background: var(--jungle-mid);
       border: 1px solid var(--border);
+      border-radius: 6px;
       padding: 15px 20px;
       transition: all 0.3s;
     }
@@ -160,18 +157,19 @@
     .tech-item:hover {
       transform: translateY(-2px);
       box-shadow: 0 5px 15px var(--shadow);
+      border-color: var(--vine);
     }
 
     .tech-item h4 {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 1.1rem;
-      color: var(--ink);
+      color: var(--sand);
       margin-bottom: 5px;
     }
 
     .tech-item p {
       font-size: 0.9rem;
-      color: var(--ink-faded);
+      color: rgba(232, 224, 204, 0.5);
       margin: 0;
     }
 
@@ -199,12 +197,13 @@
 
     .gallery-item {
       aspect-ratio: 16/10;
-      background: var(--parchment-dark);
+      background: var(--jungle-mid);
       border: 1px solid var(--border);
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--ink-faded);
+      color: rgba(232, 224, 204, 0.3);
       font-style: italic;
       overflow: hidden;
     }
@@ -228,36 +227,23 @@
       font-family: 'Cormorant Garamond', Georgia, serif;
     }
 
-    .project-nav .next::after {
-      content: ' →';
-    }
-
-    .project-nav .prev::before {
-      content: '← ';
-    }
+    .project-nav .next::after { content: ' →'; }
+    .project-nav .prev::before { content: '← '; }
 
     @media (max-width: 600px) {
-      .book-cover {
-        padding: 40px 30px;
-      }
-
-      .book-cover h1 {
-        font-size: 2rem;
-      }
-
-      .project-links {
-        flex-direction: column;
-      }
+      .project-cover { padding: 40px 30px; }
+      .project-cover h1 { font-size: 2rem; }
+      .project-links { flex-direction: column; }
     }
   </style>
 </head>
 <body>
-  <a href="../library.html" class="nav-back">Return to Library</a>
+  <a href="../library.html" class="nav-back">Return to Troop</a>
 
   <div class="project-container container">
-    <!-- Book Cover - CHANGE: Update volume number, title, subtitle, and tags -->
-    <header class="book-cover">
-      <p class="volume-number">Volume X</p>
+    <!-- Project Cover - CHANGE: Update territory number, title, subtitle, and tags -->
+    <header class="project-cover">
+      <p class="project-number">Territory 0X</p>
       <h1>Project Title</h1>
       <p class="subtitle">A brief tagline describing the project</p>
       <div class="project-tags">
@@ -270,7 +256,7 @@
     <!-- Chapter 1: Overview - CHANGE: Write your overview -->
     <section class="chapter">
       <div class="chapter-header">
-        <span class="chapter-number">I</span>
+        <span class="chapter-number">01</span>
         <h2>Overview</h2>
       </div>
       <p>
@@ -286,7 +272,7 @@
     <!-- Chapter 2: Features/Architecture - CHANGE: Update content -->
     <section class="chapter">
       <div class="chapter-header">
-        <span class="chapter-number">II</span>
+        <span class="chapter-number">02</span>
         <h2>Key Features</h2>
       </div>
       <ul>
@@ -300,7 +286,7 @@
     <!-- Chapter 3: Technology Stack - CHANGE: Update technologies -->
     <section class="chapter">
       <div class="chapter-header">
-        <span class="chapter-number">III</span>
+        <span class="chapter-number">03</span>
         <h2>Technology Stack</h2>
       </div>
       <div class="tech-stack">
@@ -326,7 +312,7 @@
     <!-- Chapter 4: Gallery (optional) - CHANGE: Add images or remove section -->
     <section class="chapter">
       <div class="chapter-header">
-        <span class="chapter-number">IV</span>
+        <span class="chapter-number">04</span>
         <h2>Gallery</h2>
       </div>
       <div class="gallery">
@@ -340,7 +326,7 @@
     <!-- Chapter 5: Links - CHANGE: Update URLs -->
     <section class="chapter">
       <div class="chapter-header">
-        <span class="chapter-number">V</span>
+        <span class="chapter-number">05</span>
         <h2>Resources</h2>
       </div>
       <div class="project-links">
@@ -351,8 +337,8 @@
 
     <!-- Navigation - CHANGE: Update prev/next links -->
     <nav class="project-nav">
-      <a href="previous-project.html" class="prev">Previous Volume</a>
-      <a href="next-project.html" class="next">Next Volume</a>
+      <a href="previous-project.html" class="prev">Previous Project</a>
+      <a href="next-project.html" class="next">Next Project</a>
     </nav>
   </div>
 </body>
@@ -365,21 +351,22 @@ HOW TO ADD A NEW PROJECT:
 
 1. Copy this template file and rename it (e.g., "my-project.html")
 
-2. Update the book cover:
-   - Change volume number (I, II, III, IV, V, VI, VII, VIII, IX, X...)
+2. Update the project cover:
+   - Change territory number (01, 02, 03, 04...)
    - Change title and subtitle
    - Update tags
-   - Pick a color theme (see comment in CSS)
+   - Pick a primate theme (see comment in CSS)
+   - Update the background-image URL to match your primate
 
 3. Write your chapters:
    - Update chapter content
    - Add or remove chapters as needed
-   - Update chapter numbers (Roman numerals)
+   - Update chapter numbers (01, 02, 03...)
 
 4. Add to library.html:
-   - Add a new book div in the .shelf:
+   - Add a new book div in the .shelf with a primate class:
 
-   <div class="book green">
+   <div class="book gorilla">
      <a href="projects/my-project.html">
        <h3>Project Name</h3>
        <p>Brief description</p>
@@ -387,18 +374,24 @@ HOW TO ADD A NEW PROJECT:
          <span class="tag">Tag1</span>
          <span class="tag">Tag2</span>
        </div>
-       <span class="book-number">III</span>
+       <span class="book-number">04</span>
      </a>
    </div>
 
 5. Update navigation links in adjacent project files
 
-Book color classes available:
-- (default brown) - no class needed
-- .burgundy - deep red
-- .navy - dark blue
-- .green - forest green
-- .purple - deep purple
+Primate theme classes available:
+- .gorilla    — dark grays/blacks (image: gorilla_1.png)
+- .orangutan  — warm browns (image: orangutan_1.png)
+- .chimp      — deep greens (image: chimp_1.png)
+
+Add more primate themes by creating new classes in styles.css:
+- .mandrill   — deep blues
+- .lemur      — purples
+- .capuchin   — warm tans
+
+Image naming convention: [species]_[number].png
+Place images in the portfolio/images/ folder.
 
 ================================================================================
 -->

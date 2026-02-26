@@ -1,16 +1,19 @@
-/* Library of Babel Portfolio - Shared Styles */
+/* Primate Portfolio - Shared Styles */
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 :root {
-  --parchment: #e8dfc9;
-  --parchment-dark: #ddd3bb;
-  --ink: #2e1f0e;
-  --ink-light: #52412b;
-  --ink-faded: #7a6548;
-  --accent: #8b5a2b;
-  --border: #b8a882;
-  --shadow: rgba(46, 31, 14, 0.18);
+  --jungle: #0f1a0f;
+  --jungle-mid: #1a2e1a;
+  --canopy: #243524;
+  --bark: #3e2723;
+  --bark-light: #6d4c41;
+  --vine: #66bb6a;
+  --moss: #a5d6a7;
+  --sand: #e8e0cc;
+  --fur: #d4a574;
+  --border: #3a5a3a;
+  --shadow: rgba(0, 0, 0, 0.35);
 }
 
 * {
@@ -21,14 +24,14 @@
 
 body {
   font-family: 'Lora', Georgia, serif;
-  background: var(--parchment);
-  color: var(--ink);
+  background: var(--jungle);
+  color: var(--sand);
   min-height: 100vh;
   line-height: 1.7;
   position: relative;
 }
 
-/* Paper texture overlay */
+/* Jungle texture overlay */
 body::before {
   content: '';
   position: fixed;
@@ -36,13 +39,13 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
   pointer-events: none;
   z-index: 1000;
 }
 
-/* Aged paper spots */
+/* Dappled light effect */
 body::after {
   content: '';
   position: fixed;
@@ -51,9 +54,9 @@ body::after {
   width: 100%;
   height: 100%;
   background:
-    radial-gradient(ellipse at 20% 30%, rgba(139, 115, 85, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 70%, rgba(139, 115, 85, 0.06) 0%, transparent 40%),
-    radial-gradient(ellipse at 60% 20%, rgba(139, 115, 85, 0.05) 0%, transparent 30%);
+    radial-gradient(ellipse at 20% 20%, rgba(102, 187, 106, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 75% 60%, rgba(102, 187, 106, 0.03) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 90%, rgba(62, 39, 35, 0.06) 0%, transparent 30%);
   pointer-events: none;
   z-index: 999;
 }
@@ -72,40 +75,40 @@ h1, h2, h3 {
 h1 {
   font-size: 2.8rem;
   letter-spacing: 0.08em;
-  color: var(--ink);
+  color: var(--sand);
 }
 
 h2 {
   font-size: 1.8rem;
   letter-spacing: 0.05em;
-  color: var(--ink);
+  color: var(--sand);
   margin-bottom: 1.5rem;
 }
 
 h3 {
   font-size: 1.4rem;
-  color: var(--ink-light);
+  color: var(--moss);
 }
 
 p {
-  color: var(--ink-light);
+  color: rgba(232, 224, 204, 0.8);
   font-size: 1.1rem;
 }
 
 a {
-  color: var(--accent);
+  color: var(--vine);
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
 a:hover {
-  color: var(--ink);
+  color: var(--moss);
 }
 
 /* Decorative elements */
 .ornament {
   text-align: center;
-  color: var(--ink-faded);
+  color: var(--border);
   font-size: 1.5rem;
   letter-spacing: 0.5em;
   margin: 2rem 0;
@@ -124,102 +127,129 @@ a:hover {
   margin: 3rem 0;
 }
 
-/* Book styling for projects */
+/* Project card styling */
 .book {
-  background: linear-gradient(135deg, #8b4513 0%, #654321 50%, #4a3520 100%);
-  border-radius: 3px 8px 8px 3px;
-  padding: 25px 30px 25px 35px;
+  background: linear-gradient(135deg, var(--canopy) 0%, var(--jungle-mid) 100%);
+  border-radius: 8px;
+  padding: 25px 30px;
   position: relative;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow:
-    2px 2px 8px var(--shadow),
-    inset -3px 0 10px rgba(0,0,0,0.2);
-  min-height: 180px;
+  box-shadow: 2px 2px 12px var(--shadow);
+  min-height: 200px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
+  overflow: hidden;
+  border: 1px solid rgba(102, 187, 106, 0.1);
 }
 
+/* Card image background */
 .book::before {
   content: '';
   position: absolute;
-  left: 0;
   top: 0;
+  left: 0;
+  right: 0;
   bottom: 0;
-  width: 20px;
-  background: linear-gradient(
-    to right,
-    rgba(0,0,0,0.3) 0%,
-    rgba(0,0,0,0.1) 30%,
-    transparent 100%
-  );
-  border-radius: 3px 0 0 3px;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.15;
+  transition: opacity 0.3s ease;
 }
 
-/* Book spine lines */
 .book::after {
   content: '';
   position: absolute;
-  left: 8px;
-  top: 15px;
-  bottom: 15px;
-  width: 2px;
-  background: rgba(212, 175, 55, 0.4);
-  box-shadow: 4px 0 0 rgba(212, 175, 55, 0.2);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70%;
+  background: linear-gradient(to top, var(--jungle-mid) 20%, transparent 100%);
 }
 
 .book:hover {
-  transform: translateY(-5px) rotate(-1deg);
-  box-shadow:
-    5px 8px 15px var(--shadow),
-    inset -3px 0 10px rgba(0,0,0,0.2);
+  transform: translateY(-5px);
+  box-shadow: 4px 8px 20px var(--shadow);
+  border-color: rgba(102, 187, 106, 0.25);
+}
+
+.book:hover::before {
+  opacity: 0.25;
 }
 
 .book h3 {
-  color: #d4af37;
+  color: var(--vine);
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1.3rem;
-  margin-bottom: 10px;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 2;
 }
 
 .book p {
-  color: #c4a87c;
+  color: rgba(232, 224, 204, 0.7);
   font-size: 0.95rem;
   font-style: italic;
+  position: relative;
+  z-index: 2;
 }
 
 .book .book-number {
   position: absolute;
-  bottom: 15px;
+  top: 15px;
   right: 20px;
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  color: rgba(212, 175, 55, 0.5);
-  font-size: 2rem;
+  font-family: 'IBM Plex Mono', monospace;
+  color: rgba(102, 187, 106, 0.3);
+  font-size: 1.5rem;
+  font-weight: 500;
+  z-index: 2;
 }
 
-/* Different book colors */
-.book.burgundy {
-  background: linear-gradient(135deg, #722f37 0%, #5c252c 50%, #461c22 100%);
+/* Primate species card themes */
+.book.gorilla {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+}
+.book.gorilla::before {
+  background-image: url('../images/gorilla_1.png');
+}
+.book.gorilla::after {
+  background: linear-gradient(to top, #1a1a1a 20%, transparent 100%);
+}
+.book.gorilla h3 {
+  color: #e0e0e0;
 }
 
-.book.navy {
-  background: linear-gradient(135deg, #1e3a5f 0%, #152a45 50%, #0f1f33 100%);
+.book.orangutan {
+  background: linear-gradient(135deg, #3e2723 0%, #4e342e 50%, #3e2723 100%);
+}
+.book.orangutan::before {
+  background-image: url('../images/orangutan_1.png');
+}
+.book.orangutan::after {
+  background: linear-gradient(to top, #3e2723 20%, transparent 100%);
+}
+.book.orangutan h3 {
+  color: var(--fur);
 }
 
-.book.green {
-  background: linear-gradient(135deg, #2d4a3e 0%, #1f362c 50%, #15261f 100%);
+.book.chimp {
+  background: linear-gradient(135deg, #1b3a1b 0%, #2d4a2d 50%, #1b3a1b 100%);
 }
-
-.book.purple {
-  background: linear-gradient(135deg, #4a3060 0%, #362248 50%, #261835 100%);
+.book.chimp::before {
+  background-image: url('../images/chimp_1.png');
+}
+.book.chimp::after {
+  background: linear-gradient(to top, #1b3a1b 20%, transparent 100%);
+}
+.book.chimp h3 {
+  color: var(--vine);
 }
 
 /* Certificate styling */
 .certificate {
-  background: var(--parchment-dark);
-  border: 2px solid var(--border);
+  background: var(--jungle-mid);
+  border: 1px solid var(--border);
   padding: 20px 25px;
   position: relative;
   transition: all 0.3s ease;
@@ -232,7 +262,7 @@ a:hover {
   left: 8px;
   right: 8px;
   bottom: 8px;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(102, 187, 106, 0.15);
   pointer-events: none;
 }
 
@@ -247,17 +277,17 @@ a:hover {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1.1rem;
   padding: 12px 30px;
-  border: 2px solid var(--ink);
+  border: 2px solid var(--vine);
   background: transparent;
-  color: var(--ink);
+  color: var(--vine);
   cursor: pointer;
   transition: all 0.3s ease;
   letter-spacing: 0.05em;
 }
 
 .btn:hover {
-  background: var(--ink);
-  color: var(--parchment);
+  background: var(--vine);
+  color: var(--jungle);
 }
 
 /* Navigation */
@@ -267,12 +297,12 @@ a:hover {
   left: 30px;
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1rem;
-  color: var(--ink-faded);
+  color: rgba(232, 224, 204, 0.5);
   z-index: 100;
 }
 
 .nav-back:hover {
-  color: var(--ink);
+  color: var(--vine);
 }
 
 .nav-back::before {
@@ -285,15 +315,18 @@ a:hover {
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 15px;
+  position: relative;
+  z-index: 2;
 }
 
 .tag {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.75rem;
   padding: 4px 10px;
-  background: rgba(255,255,255,0.1);
-  color: #c4a87c;
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(102, 187, 106, 0.1);
+  color: var(--moss);
+  border: 1px solid rgba(102, 187, 106, 0.2);
+  border-radius: 3px;
 }
 
 /* Responsive */
@@ -308,6 +341,6 @@ a:hover {
 
   .book {
     min-height: 150px;
-    padding: 20px 25px 20px 30px;
+    padding: 20px 25px;
   }
 }

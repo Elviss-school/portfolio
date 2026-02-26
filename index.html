@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Library</title>
+  <title>The Troop</title>
   <link rel="stylesheet" href="css/styles.css">
   <style>
     html {
@@ -14,7 +14,7 @@
       overflow-x: hidden;
     }
 
-    /* Hero section with text at top */
+    /* Hero section */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -30,8 +30,8 @@
     .title {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 4rem;
-      letter-spacing: 0.2em;
-      color: var(--ink);
+      letter-spacing: 0.15em;
+      color: var(--sand);
       margin-bottom: 20px;
       text-transform: uppercase;
     }
@@ -40,8 +40,8 @@
       font-family: 'Lora', Georgia, serif;
       font-style: italic;
       font-size: 1.4rem;
-      color: var(--ink-faded);
-      letter-spacing: 0.1em;
+      color: rgba(232, 224, 204, 0.6);
+      letter-spacing: 0.05em;
       margin-bottom: 50px;
     }
 
@@ -78,7 +78,7 @@
     .epigraph p {
       font-style: italic;
       font-size: 1.15rem;
-      color: var(--ink-light);
+      color: rgba(232, 224, 204, 0.7);
       line-height: 1.9;
     }
 
@@ -86,7 +86,7 @@
       display: block;
       margin-top: 20px;
       font-size: 0.95rem;
-      color: var(--ink-faded);
+      color: rgba(232, 224, 204, 0.4);
       letter-spacing: 0.08em;
     }
 
@@ -97,7 +97,7 @@
       left: 50%;
       transform: translateX(-50%);
       text-align: center;
-      color: var(--ink-faded);
+      color: rgba(232, 224, 204, 0.4);
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-style: italic;
       animation: bounce 2s infinite;
@@ -120,8 +120,8 @@
       50% { transform: translateX(-50%) translateY(10px); }
     }
 
-    /* Atlas section */
-    .atlas-section {
+    /* Primate section */
+    .primate-section {
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -131,38 +131,61 @@
       z-index: 1;
     }
 
-    .atlas-container {
+    .primate-container {
       position: relative;
       cursor: pointer;
       transition: transform 0.5s ease;
+      text-align: center;
     }
 
-    .atlas-container:hover {
+    .primate-container:hover {
       transform: scale(1.02);
     }
 
-    .atlas-image {
-      max-width: 500px;
+    .primate-image {
+      max-width: 550px;
       width: 100%;
       height: auto;
       display: block;
-      /* Remove background - works if image has transparency or solid bg */
-      filter: drop-shadow(0 10px 30px rgba(44, 36, 22, 0.3));
+      border-radius: 12px;
+      filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.5));
     }
 
-    /* Clickable globe overlay - positioned over the globe part of the image */
-    .globe-hitbox {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 70%;
-      height: 55%;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: all 0.3s ease;
+    /* Fallback if no image */
+    .primate-fallback {
+      display: none;
+      width: 400px;
+      height: 350px;
+      background: var(--canopy);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
     }
 
+    .no-image .primate-fallback {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .no-image .primate-image {
+      display: none;
+    }
+
+    .fallback-emoji {
+      font-size: 5rem;
+      opacity: 0.6;
+    }
+
+    .fallback-text {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.2rem;
+      color: rgba(232, 224, 204, 0.4);
+      font-style: italic;
+    }
 
     .click-hint {
       position: absolute;
@@ -171,111 +194,15 @@
       transform: translateX(-50%);
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-style: italic;
-      color: var(--ink-faded);
+      color: rgba(232, 224, 204, 0.4);
       font-size: 1.1rem;
       opacity: 0;
       transition: opacity 0.3s ease;
       white-space: nowrap;
     }
 
-    .atlas-container:hover .click-hint {
+    .primate-container:hover .click-hint {
       opacity: 1;
-    }
-
-    /* Fallback if no image - CSS Atlas */
-    .atlas-fallback {
-      display: none;
-      width: 350px;
-      height: 450px;
-      position: relative;
-    }
-
-    .no-image .atlas-fallback {
-      display: block;
-    }
-
-    .no-image .atlas-image {
-      display: none;
-    }
-
-    /* Globe for fallback */
-    .fallback-globe {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 220px;
-      height: 220px;
-      border-radius: 50%;
-      background:
-        radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 50%),
-        linear-gradient(135deg, #4a90a4 0%, #2d6a4f 30%, #40916c 60%, #1b4332 100%);
-      box-shadow:
-        inset -30px -30px 60px rgba(0,0,0,0.3),
-        0 0 40px rgba(107, 68, 35, 0.3);
-    }
-
-    .fallback-globe::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      border-radius: 50%;
-      opacity: 0.5;
-    }
-
-    .fallback-atlas {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 200px;
-      height: 280px;
-    }
-
-    .fallback-body {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 120px;
-      height: 180px;
-      background: linear-gradient(to bottom, #d4c4a8 0%, #c4b89c 50%, #a89880 100%);
-      clip-path: polygon(30% 0%, 70% 0%, 85% 30%, 90% 60%, 85% 100%, 15% 100%, 10% 60%, 15% 30%);
-    }
-
-    .fallback-arms {
-      position: absolute;
-      bottom: 140px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 180px;
-      height: 80px;
-    }
-
-    .fallback-arms::before,
-    .fallback-arms::after {
-      content: '';
-      position: absolute;
-      width: 25px;
-      height: 100px;
-      background: linear-gradient(to top, #c4b89c 0%, #d4c4a8 100%);
-      border-radius: 10px;
-    }
-
-    .fallback-arms::before {
-      left: 10px;
-      transform: rotate(-30deg);
-      transform-origin: bottom center;
-    }
-
-    .fallback-arms::after {
-      right: 10px;
-      transform: rotate(30deg);
-      transform-origin: bottom center;
     }
 
     @media (max-width: 600px) {
@@ -288,25 +215,30 @@
         font-size: 1.1rem;
       }
 
-      .atlas-image {
+      .primate-image {
         max-width: 320px;
       }
 
       .epigraph {
         padding: 25px 20px;
       }
+
+      .primate-fallback {
+        width: 300px;
+        height: 260px;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Hero Section with Text -->
+  <!-- Hero Section -->
   <section class="hero">
-    <h1 class="title">The Library</h1>
+    <h1 class="title">The Troop</h1>
     <p class="subtitle">Projects, notes, and things I'm figuring out</p>
 
     <div class="epigraph">
-      <p>The universe (which others call the Library) is composed of an indefinite, perhaps infinite, number of hexagonal galleries...</p>
-      <cite>— Jorge Luis Borges, "The Library of Babel"</cite>
+      <p>The greatness of a nation and its moral progress can be judged by the way its animals are treated.</p>
+      <cite>— Mahatma Gandhi</cite>
     </div>
 
     <div class="scroll-hint">
@@ -314,30 +246,19 @@
     </div>
   </section>
 
-  <!-- Atlas Section -->
-  <section class="atlas-section" id="atlas">
-    <a href="library.html" class="atlas-container" title="Enter the Library">
-      <!--
-        Save your Atlas image as: images/atlas.png
-        For best results, use an image with transparent background
-        or the cream/beige background from your reference image
-      -->
-      <img src="images/atlas2.png" alt="Atlas holding the Library" class="atlas-image"
+  <!-- Primate Entrance Section -->
+  <section class="primate-section" id="entrance">
+    <a href="library.html" class="primate-container" title="Enter">
+      <img src="images/primates_group_1.png" alt="The Troop" class="primate-image"
            onerror="this.parentElement.classList.add('no-image')">
 
-      <!-- Fallback CSS Atlas if image doesn't load -->
-      <div class="atlas-fallback">
-        <div class="fallback-globe"></div>
-        <div class="fallback-atlas">
-          <div class="fallback-arms"></div>
-          <div class="fallback-body"></div>
-        </div>
+      <!-- Fallback if image doesn't load -->
+      <div class="primate-fallback">
+        <span class="fallback-emoji">🦍🦧🐒</span>
+        <span class="fallback-text">Click to enter</span>
       </div>
 
-      <!-- Invisible clickable area over the globe -->
-      <div class="globe-hitbox"></div>
-
-      <span class="click-hint">Click the globe to enter</span>
+      <span class="click-hint">Click to enter</span>
     </a>
   </section>
 </body>

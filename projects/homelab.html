@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Volume I: Homelab - The Library</title>
+  <title>01: Homelab - The Troop</title>
   <link rel="stylesheet" href="../css/styles.css">
   <style>
     .project-container {
@@ -14,64 +14,61 @@
       z-index: 1;
     }
 
-    /* Book cover header */
-    .book-cover {
-      background: linear-gradient(135deg, #722f37 0%, #5c252c 50%, #461c22 100%);
+    /* Project header */
+    .project-cover {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
       padding: 60px 40px;
       text-align: center;
       margin-bottom: 50px;
       position: relative;
-      box-shadow:
-        5px 5px 20px rgba(44, 36, 22, 0.4),
-        inset -5px 0 20px rgba(0,0,0,0.2);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
     }
 
-    .book-cover::before {
+    .project-cover::before {
       content: '';
       position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 30px;
-      background: linear-gradient(
-        to right,
-        rgba(0,0,0,0.4) 0%,
-        rgba(0,0,0,0.1) 50%,
-        transparent 100%
-      );
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url('../images/gorilla_1.png');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.1;
     }
 
-    .book-cover::after {
+    .project-cover::after {
       content: '';
       position: absolute;
-      left: 12px;
-      top: 20px;
-      bottom: 20px;
-      width: 3px;
-      background: rgba(212, 175, 55, 0.3);
-      box-shadow: 5px 0 0 rgba(212, 175, 55, 0.15);
+      bottom: 0; left: 0; right: 0;
+      height: 50%;
+      background: linear-gradient(to top, #1a1a1a, transparent);
     }
 
-    .book-cover .volume-number {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1rem;
-      color: rgba(212, 175, 55, 0.7);
+    .project-cover .project-number {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.9rem;
+      color: rgba(224, 224, 224, 0.5);
       letter-spacing: 0.3em;
       margin-bottom: 15px;
       text-transform: uppercase;
+      position: relative;
+      z-index: 2;
     }
 
-    .book-cover h1 {
-      color: #d4af37;
+    .project-cover h1 {
+      color: #e0e0e0;
       font-size: 3rem;
       margin-bottom: 15px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      position: relative;
+      z-index: 2;
     }
 
-    .book-cover .subtitle {
-      color: #c4a87c;
+    .project-cover .subtitle {
+      color: rgba(224, 224, 224, 0.6);
       font-style: italic;
       font-size: 1.2rem;
+      position: relative;
+      z-index: 2;
     }
 
     .project-tags {
@@ -79,11 +76,8 @@
       justify-content: center;
       gap: 10px;
       margin-top: 25px;
-    }
-
-    .project-tags .tag {
-      background: rgba(0,0,0,0.3);
-      border-color: rgba(212, 175, 55, 0.3);
+      position: relative;
+      z-index: 2;
     }
 
     /* Content sections */
@@ -99,8 +93,8 @@
     }
 
     .chapter-number {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 2.5rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1.8rem;
       color: var(--border);
       line-height: 1;
     }
@@ -123,17 +117,18 @@
       position: relative;
       padding-left: 25px;
       margin-bottom: 12px;
-      color: var(--ink-light);
+      color: rgba(232, 224, 204, 0.7);
     }
 
     .chapter li::before {
-      content: '~';
+      content: '>';
       position: absolute;
       left: 0;
-      color: var(--ink-faded);
+      color: var(--vine);
+      font-family: 'IBM Plex Mono', monospace;
     }
 
-    /* Tech stack display */
+    /* Tech stack */
     .tech-stack {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -142,8 +137,9 @@
     }
 
     .tech-item {
-      background: var(--parchment-dark);
+      background: var(--jungle-mid);
       border: 1px solid var(--border);
+      border-radius: 6px;
       padding: 15px 20px;
       transition: all 0.3s;
     }
@@ -151,22 +147,23 @@
     .tech-item:hover {
       transform: translateY(-2px);
       box-shadow: 0 5px 15px var(--shadow);
+      border-color: var(--vine);
     }
 
     .tech-item h4 {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 1.1rem;
-      color: var(--ink);
+      color: var(--sand);
       margin-bottom: 5px;
     }
 
     .tech-item p {
       font-size: 0.9rem;
-      color: var(--ink-faded);
+      color: rgba(232, 224, 204, 0.5);
       margin: 0;
     }
 
-    /* Links section */
+    /* Links */
     .project-links {
       display: flex;
       gap: 20px;
@@ -180,7 +177,7 @@
       text-align: center;
     }
 
-    /* Gallery placeholder */
+    /* Gallery */
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -190,12 +187,13 @@
 
     .gallery-item {
       aspect-ratio: 16/10;
-      background: var(--parchment-dark);
+      background: var(--jungle-mid);
       border: 1px solid var(--border);
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--ink-faded);
+      color: rgba(232, 224, 204, 0.3);
       font-style: italic;
     }
 
@@ -212,36 +210,22 @@
       font-family: 'Cormorant Garamond', Georgia, serif;
     }
 
-    .project-nav .next::after {
-      content: ' →';
-    }
-
-    .project-nav .prev::before {
-      content: '← ';
-    }
+    .project-nav .next::after { content: ' →'; }
+    .project-nav .prev::before { content: '← '; }
 
     @media (max-width: 600px) {
-      .book-cover {
-        padding: 40px 30px;
-      }
-
-      .book-cover h1 {
-        font-size: 2rem;
-      }
-
-      .project-links {
-        flex-direction: column;
-      }
+      .project-cover { padding: 40px 30px; }
+      .project-cover h1 { font-size: 2rem; }
+      .project-links { flex-direction: column; }
     }
   </style>
 </head>
 <body>
-  <a href="../library.html" class="nav-back">Return to Library</a>
+  <a href="../library.html" class="nav-back">Return to Troop</a>
 
   <div class="project-container container">
-    <!-- Book Cover -->
-    <header class="book-cover">
-      <p class="volume-number">Volume I</p>
+    <header class="project-cover">
+      <p class="project-number">Territory 01</p>
       <h1>Homelab</h1>
       <p class="subtitle">Infrastructure Experiments & Self-Hosted Services</p>
       <div class="project-tags">
@@ -252,14 +236,13 @@
       </div>
     </header>
 
-    <!-- Chapter 1: Overview -->
     <section class="chapter">
       <div class="chapter-header">
-        <span class="chapter-number">I</span>
+        <span class="chapter-number">01</span>
         <h2>Overview</h2>
       </div>
       <p>
-        This volume documents the construction and maintenance of a personal homelab
+        This documents the construction and maintenance of a personal homelab
         environment. What began as a simple curiosity evolved into a comprehensive
         infrastructure serving various self-hosted services and providing a sandbox
         for experimentation with enterprise technologies.
@@ -271,10 +254,9 @@
       </p>
     </section>
 
-    <!-- Chapter 2: Architecture -->
     <section class="chapter">
       <div class="chapter-header">
-        <span class="chapter-number">II</span>
+        <span class="chapter-number">02</span>
         <h2>Architecture</h2>
       </div>
       <p>The current infrastructure consists of:</p>
@@ -287,10 +269,9 @@
       </ul>
     </section>
 
-    <!-- Chapter 3: Technology Stack -->
     <section class="chapter">
       <div class="chapter-header">
-        <span class="chapter-number">III</span>
+        <span class="chapter-number">03</span>
         <h2>Technology Stack</h2>
       </div>
       <div class="tech-stack">
@@ -321,10 +302,9 @@
       </div>
     </section>
 
-    <!-- Chapter 4: Services -->
     <section class="chapter">
       <div class="chapter-header">
-        <span class="chapter-number">IV</span>
+        <span class="chapter-number">04</span>
         <h2>Hosted Services</h2>
       </div>
       <ul>
@@ -338,10 +318,9 @@
       </ul>
     </section>
 
-    <!-- Chapter 5: Gallery -->
     <section class="chapter">
       <div class="chapter-header">
-        <span class="chapter-number">V</span>
+        <span class="chapter-number">05</span>
         <h2>Gallery</h2>
       </div>
       <div class="gallery">
@@ -351,10 +330,9 @@
       </div>
     </section>
 
-    <!-- Links -->
     <section class="chapter">
       <div class="chapter-header">
-        <span class="chapter-number">VI</span>
+        <span class="chapter-number">06</span>
         <h2>Resources</h2>
       </div>
       <div class="project-links">
@@ -363,10 +341,9 @@
       </div>
     </section>
 
-    <!-- Navigation -->
     <nav class="project-nav">
-      <a href="../library.html" class="prev">Back to Library</a>
-      <a href="placeholder.html" class="next">Volume II</a>
+      <a href="../library.html" class="prev">Back to Troop</a>
+      <a href="placeholder.html" class="next">Project 02</a>
     </nav>
   </div>
 </body>

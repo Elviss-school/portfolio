@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>04: N24 Tracker — The Troop</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    /* ── Night-owl theme overrides ── */
+    :root {
+      --night-deep:    #0a0d1a;
+      --night-mid:     #111827;
+      --night-surface: #1a2035;
+      --dawn:          #6e8efb;
+      --dusk:          #a777e3;
+      --starlight:     #c8d6f8;
+      --night-border:  rgba(110, 142, 251, 0.2);
+    }
+
+    body { background: var(--night-deep); }
+
+    body::after {
+      background:
+        radial-gradient(ellipse at 20% 10%, rgba(110,142,251,0.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 40%, rgba(167,119,227,0.05) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 85%, rgba(110,142,251,0.04) 0%, transparent 40%);
+    }
+
+    a { color: var(--dawn); }
+    a:hover { color: var(--starlight); }
+    h3 { color: var(--dawn); }
+
+    .project-container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 80px 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Book cover ── */
+    .book-cover {
+      background: linear-gradient(135deg, #0a0d1a 0%, #1a2035 50%, #0a0d1a 100%);
+      padding: 60px 40px;
+      text-align: center;
+      margin-bottom: 40px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+      position: relative;
+    }
+    .book-cover::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 40%, rgba(110,142,251,0.13) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 60%, rgba(167,119,227,0.08) 0%, transparent 50%);
+    }
+    .book-cover::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 40%;
+      background: linear-gradient(to top, #0a0d1a, transparent);
+    }
+    .volume-number {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      color: rgba(110,142,251,0.5);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 2;
+    }
+    .book-cover h1 {
+      color: var(--dawn);
+      font-size: 2.6rem;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 2;
+    }
+    .book-cover .subtitle {
+      color: rgba(200,214,248,0.65);
+      font-style: italic;
+      font-size: 1.1rem;
+      position: relative;
+      z-index: 2;
+    }
+    .cover-tags {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+      position: relative;
+      z-index: 2;
+    }
+    .cover-tags .tag {
+      background: rgba(110,142,251,0.1);
+      color: var(--starlight);
+      border-color: rgba(110,142,251,0.2);
+    }
+
+    /* ── Section block ── */
+    .section-block {
+      background: var(--night-mid);
+      border: 1px solid var(--night-border);
+      border-radius: 8px;
+      padding: 28px;
+      margin-bottom: 28px;
+    }
+    .section-block h2 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.4rem;
+      color: var(--starlight);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--night-border);
+    }
+
+    /* ── Form ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .field label {
+      display: block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: rgba(200,214,248,0.45);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .field input {
+      width: 100%;
+      background: var(--night-surface);
+      border: 1px solid var(--night-border);
+      color: var(--sand);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.95rem;
+      padding: 10px 12px;
+      border-radius: 4px;
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    .field input:focus { border-color: var(--dawn); }
+    .field input::-webkit-calendar-picker-indicator {
+      filter: invert(0.6) sepia(1) hue-rotate(200deg) brightness(1.2);
+      cursor: pointer;
+    }
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .btn-night {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.05rem;
+      padding: 10px 28px;
+      border: 2px solid var(--dawn);
+      background: transparent;
+      color: var(--dawn);
+      cursor: pointer;
+      transition: all 0.25s;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+    }
+    .btn-night:hover {
+      background: var(--dawn);
+      color: var(--night-deep);
+    }
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid rgba(200,214,248,0.2);
+      color: rgba(200,214,248,0.5);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      padding: 7px 15px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .btn-ghost:hover {
+      border-color: var(--dawn);
+      color: var(--dawn);
+    }
+    .btn-ghost.danger { border-color: rgba(248,113,113,0.3); color: rgba(248,113,113,0.5); }
+    .btn-ghost.danger:hover { border-color: #f87171; color: #f87171; }
+    .edit-indicator {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--dusk);
+      display: none;
+    }
+    .edit-indicator.visible { display: inline; }
+
+    /* ── Data controls ── */
+    .data-controls {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Tables ── */
+    .scroll-table { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; }
+    th {
+      text-align: left;
+      color: rgba(200,214,248,0.4);
+      font-weight: 500;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--night-border);
+    }
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(110,142,251,0.07);
+      color: var(--sand);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(110,142,251,0.035); }
+
+    .drift-pos { color: #f87171; }
+    .drift-neg { color: #86efac; }
+    .drift-zero { color: var(--starlight); }
+
+    .zone-badge {
+      display: inline-block;
+      font-size: 0.71rem;
+      padding: 2px 7px;
+      border-radius: 3px;
+      border: 1px solid;
+      white-space: nowrap;
+    }
+    .zone-night     { background: rgba(99,102,241,0.1);  color: #a5b4fc; border-color: rgba(99,102,241,0.25); }
+    .zone-morning   { background: rgba(251,191,36,0.08); color: #fde68a; border-color: rgba(251,191,36,0.2); }
+    .zone-afternoon { background: rgba(249,115,22,0.1);  color: #fed7aa; border-color: rgba(249,115,22,0.2); }
+    .zone-evening   { background: rgba(167,119,227,0.1); color: #d8b4fe; border-color: rgba(167,119,227,0.2); }
+
+    .warn-icon { color: #fbbf24; }
+    .low-conf-row td { opacity: 0.72; }
+
+    .table-actions { display: flex; gap: 5px; }
+    .action-btn {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      padding: 3px 9px;
+      border: 1px solid;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 3px;
+      transition: all 0.15s;
+    }
+    .action-edit { color: var(--dawn); border-color: rgba(110,142,251,0.3); }
+    .action-edit:hover { background: rgba(110,142,251,0.1); }
+    .action-del { color: #f87171; border-color: rgba(248,113,113,0.3); }
+    .action-del:hover { background: rgba(248,113,113,0.08); }
+
+    .empty-state {
+      text-align: center;
+      padding: 28px;
+      color: rgba(200,214,248,0.25);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 1.05rem;
+    }
+
+    /* ── Cycle progress ring ── */
+    .cycle-layout {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+    .cycle-ring {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--dawn) calc(var(--pct, 0) * 1%),
+        var(--night-surface) calc(var(--pct, 0) * 1%)
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .cycle-ring::before {
+      content: '';
+      position: absolute;
+      width: 108px;
+      height: 108px;
+      background: var(--night-mid);
+      border-radius: 50%;
+    }
+    .cycle-ring-inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+    .cycle-pct-big {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.9rem;
+      color: var(--dawn);
+      line-height: 1;
+    }
+    .cycle-pct-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.62rem;
+      color: rgba(200,214,248,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .cycle-stats { flex: 1; }
+    .cycle-stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(110,142,251,0.07);
+    }
+    .cycle-stat-row:last-child { border-bottom: none; }
+    .stat-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: rgba(200,214,248,0.45);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .stat-value {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.1rem;
+      color: var(--starlight);
+    }
+
+    /* ── Predict controls ── */
+    .predict-controls {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .predict-controls label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      color: rgba(200,214,248,0.45);
+    }
+    .predict-controls input[type="number"] {
+      width: 68px;
+      background: var(--night-surface);
+      border: 1px solid var(--night-border);
+      color: var(--sand);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.9rem;
+      padding: 6px 10px;
+      border-radius: 4px;
+      outline: none;
+    }
+    .predict-controls input[type="number"]:focus { border-color: var(--dawn); }
+    .btn-sm {
+      font-size: 0.88rem;
+      padding: 7px 18px;
+    }
+
+    .n24-divider {
+      border: none;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--night-border) 30%, var(--night-border) 70%, transparent);
+      margin: 30px 0;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .project-container { padding: 60px 16px; }
+      .book-cover { padding: 40px 20px; }
+      .book-cover h1 { font-size: 2rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .field input { font-size: 1rem; padding: 12px; }
+      .cycle-layout { flex-direction: column; gap: 24px; }
+      .cycle-ring { width: 130px; height: 130px; }
+      .cycle-ring::before { width: 92px; height: 92px; }
+      .cycle-pct-big { font-size: 1.5rem; }
+      .section-block { padding: 20px 16px; }
+      .data-controls { justify-content: center; }
+      th, td { padding: 8px 8px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="../library.html" class="nav-back">The Library</a>
+
+  <div class="project-container container">
+
+    <!-- Book Cover -->
+    <header class="book-cover">
+      <p class="volume-number">Volume 04 — Health Log</p>
+      <h1>N24 Tracker</h1>
+      <p class="subtitle">Non-24 sleep cycle log, drift model &amp; predictions</p>
+      <div class="cover-tags">
+        <span class="tag">N24-SWSD</span>
+        <span class="tag">Sleep</span>
+        <span class="tag">Personal</span>
+      </div>
+    </header>
+
+    <!-- Data Controls -->
+    <div class="data-controls">
+      <button class="btn-ghost" id="export-btn">Export JSON</button>
+      <button class="btn-ghost" id="import-btn">Import JSON</button>
+      <button class="btn-ghost danger" id="reset-btn">Reset All</button>
+      <input type="file" id="import-file" accept=".json" style="display:none">
+    </div>
+
+    <!-- Log Entry Form -->
+    <section class="section-block" id="log-form-section">
+      <h2>Log Sleep</h2>
+      <div class="form-grid">
+        <div class="field">
+          <label for="sleep-date">Sleep date</label>
+          <input type="date" id="sleep-date">
+        </div>
+        <div class="field">
+          <label for="sleep-time">Sleep onset</label>
+          <input type="time" id="sleep-time">
+        </div>
+        <div class="field">
+          <label for="wake-date">Wake date</label>
+          <input type="date" id="wake-date">
+        </div>
+        <div class="field">
+          <label for="wake-time">Wake time</label>
+          <input type="time" id="wake-time">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-night" id="log-btn">Log Entry</button>
+        <button class="btn-ghost" id="cancel-edit-btn" style="display:none">Cancel Edit</button>
+        <span class="edit-indicator" id="edit-indicator">editing entry</span>
+      </div>
+    </section>
+
+    <!-- Entry History -->
+    <section class="section-block">
+      <h2>Sleep Log</h2>
+      <div class="scroll-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Sleep Onset</th>
+              <th>Wake</th>
+              <th>Duration</th>
+              <th>Drift</th>
+              <th>Zone</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="history-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <hr class="n24-divider">
+
+    <!-- Cycle Progress -->
+    <section class="section-block">
+      <h2>Cycle Progress</h2>
+      <div class="cycle-layout">
+        <div class="cycle-ring" id="cycle-ring">
+          <div class="cycle-ring-inner">
+            <div class="cycle-pct-big" id="cycle-pct-text">0%</div>
+            <div class="cycle-pct-label">of cycle</div>
+          </div>
+        </div>
+        <div class="cycle-stats">
+          <div class="cycle-stat-row">
+            <span class="stat-label">Hours drifted (this cycle)</span>
+            <span class="stat-value" id="stat-accumulated">—</span>
+          </div>
+          <div class="cycle-stat-row">
+            <span class="stat-label">Total drift logged</span>
+            <span class="stat-value" id="stat-total-drift">—</span>
+          </div>
+          <div class="cycle-stat-row">
+            <span class="stat-label">Est. days to complete cycle</span>
+            <span class="stat-value" id="stat-days-remaining">—</span>
+          </div>
+          <div class="cycle-stat-row">
+            <span class="stat-label">Days tracked</span>
+            <span class="stat-value" id="stat-days-tracked">—</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Zone Drift Dashboard -->
+    <section class="section-block">
+      <h2>Drift Rate by Phase</h2>
+      <div class="scroll-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Phase Zone</th>
+              <th>Avg Drift / day</th>
+              <th>Avg Duration</th>
+              <th>Samples</th>
+              <th>Confidence</th>
+            </tr>
+          </thead>
+          <tbody id="zones-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Predictions -->
+    <section class="section-block">
+      <h2>Predictions</h2>
+      <div class="predict-controls">
+        <label for="predict-days">Days ahead:</label>
+        <input type="number" id="predict-days" value="7" min="1" max="30">
+        <button class="btn-night btn-sm" id="predict-btn">Generate</button>
+      </div>
+      <div class="scroll-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Day</th>
+              <th>Sleep Onset</th>
+              <th>Wake</th>
+              <th>Drift Applied</th>
+              <th>Zone</th>
+            </tr>
+          </thead>
+          <tbody id="predictions-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </div><!-- .project-container -->
+
+  <script>
+    const STORAGE_KEY = 'n24_sleep_log';
+    const ZONES = ['night', 'morning', 'afternoon', 'evening'];
+    const ZONE_LABELS = {
+      night:     'Night (22–06)',
+      morning:   'Morning (06–12)',
+      afternoon: 'Afternoon (12–18)',
+      evening:   'Evening (18–22)'
+    };
+
+    let editingId = null;
+
+    // ── Storage ───────────────────────────────────────────────────────────────
+
+    function loadLog() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+      catch { return []; }
+    }
+
+    function saveLog(entries) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    }
+
+    // ── Math ──────────────────────────────────────────────────────────────────
+
+    function parseDt(dateStr, timeStr) {
+      return new Date(`${dateStr}T${timeStr}:00`);
+    }
+
+    function getZone(hour) {
+      if (hour >= 22 || hour < 6)  return 'night';
+      if (hour < 12)               return 'morning';
+      if (hour < 18)               return 'afternoon';
+      return 'evening';
+    }
+
+    function sorted(log) {
+      return [...log].sort((a, b) =>
+        parseDt(a.sleepDate, a.sleepTime) - parseDt(b.sleepDate, b.sleepTime)
+      );
+    }
+
+    // For each consecutive pair, compute drift, duration, and phase zone.
+    // Zone is based on the *previous* sleep onset (the "from" phase).
+    function computeDriftRows(sortedLog) {
+      const rows = [];
+      for (let i = 1; i < sortedLog.length; i++) {
+        const prev = sortedLog[i - 1];
+        const curr = sortedLog[i];
+        const prevSleep = parseDt(prev.sleepDate, prev.sleepTime);
+        const prevWake  = parseDt(prev.wakeDate,  prev.wakeTime);
+        const currSleep = parseDt(curr.sleepDate, curr.sleepTime);
+        const drift     = (currSleep - prevSleep) / 3600000 - 24;
+        const duration  = (prevWake  - prevSleep) / 3600000;
+        const hour      = prevSleep.getHours() + prevSleep.getMinutes() / 60;
+        rows.push({ entryId: curr.id, drift, duration, hour, zone: getZone(hour) });
+      }
+      return rows;
+    }
+
+    function computeZoneStats(driftRows) {
+      const buckets = { night: [], morning: [], afternoon: [], evening: [] };
+      for (const r of driftRows) buckets[r.zone].push(r);
+
+      const allDrifts    = driftRows.map(r => r.drift);
+      const allDurations = driftRows.map(r => r.duration).filter(d => d > 0 && d < 24);
+      const gDrift    = allDrifts.length
+        ? allDrifts.reduce((s, v) => s + v, 0) / allDrifts.length : 1.5;
+      const gDuration = allDurations.length
+        ? allDurations.reduce((s, v) => s + v, 0) / allDurations.length : 8;
+
+      const stats = {};
+      for (const zone of ZONES) {
+        const data = buckets[zone];
+        if (!data.length) {
+          stats[zone] = { avgDrift: gDrift, avgDuration: gDuration, count: 0, lowConfidence: true };
+        } else {
+          const avgDrift = data.map(r => r.drift).reduce((s, v) => s + v, 0) / data.length;
+          const durations = data.map(r => r.duration).filter(d => d > 0 && d < 24);
+          const avgDuration = durations.length
+            ? durations.reduce((s, v) => s + v, 0) / durations.length : gDuration;
+          stats[zone] = { avgDrift, avgDuration, count: data.length, lowConfidence: data.length < 3 };
+        }
+      }
+      return stats;
+    }
+
+    // Recursive prediction: each step uses the zone of the predicted sleep onset.
+    function predictForward(lastEntry, days, zoneStats) {
+      const preds = [];
+      let current = parseDt(lastEntry.sleepDate, lastEntry.sleepTime);
+      for (let i = 0; i < days; i++) {
+        const hour  = current.getHours() + current.getMinutes() / 60;
+        const zone  = getZone(hour);
+        const { avgDrift, avgDuration, lowConfidence } = zoneStats[zone];
+        const nextSleep = new Date(current.getTime() + (24 + avgDrift) * 3600000);
+        const nextWake  = new Date(nextSleep.getTime() + avgDuration * 3600000);
+        preds.push({ day: i + 1, sleep: nextSleep, wake: nextWake, drift: avgDrift, zone, lowConfidence });
+        current = nextSleep;
+      }
+      return preds;
+    }
+
+    function computeCycleProgress(driftRows, lastEntry, zoneStats) {
+      if (!driftRows.length) return null;
+      const totalDrift   = driftRows.reduce((s, r) => s + r.drift, 0);
+      const accumulated  = ((totalDrift % 24) + 24) % 24;
+      const progressPct  = (accumulated / 24) * 100;
+
+      // Simulate forward to find how many days until this cycle completes.
+      const needed = 24 - accumulated;
+      let sim = parseDt(lastEntry.sleepDate, lastEntry.sleepTime);
+      let simAccum = 0, simDays = 0;
+      while (simAccum < needed && simDays < 90) {
+        const hour = sim.getHours() + sim.getMinutes() / 60;
+        const zone = getZone(hour);
+        const { avgDrift } = zoneStats[zone];
+        if (avgDrift <= 0) { simDays = null; break; }
+        simAccum += avgDrift;
+        sim = new Date(sim.getTime() + (24 + avgDrift) * 3600000);
+        simDays++;
+      }
+
+      return { totalDrift, accumulated, progressPct, estimatedDays: simDays };
+    }
+
+    // ── Formatters ────────────────────────────────────────────────────────────
+
+    const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+    function fmtDt(date) {
+      const dow = DAYS[date.getDay()];
+      const mo  = (date.getMonth() + 1).toString().padStart(2, '0');
+      const d   = date.getDate().toString().padStart(2, '0');
+      const h   = date.getHours().toString().padStart(2, '0');
+      const m   = date.getMinutes().toString().padStart(2, '0');
+      return `${dow} ${mo}/${d} ${h}:${m}`;
+    }
+
+    function fmtDrift(hrs) {
+      if (hrs == null) return '—';
+      const abs  = Math.abs(hrs);
+      const h    = Math.floor(abs);
+      const m    = Math.round((abs - h) * 60);
+      const sign = hrs >= 0 ? '+' : '−';
+      return `${sign}${h}h ${m.toString().padStart(2, '0')}m`;
+    }
+
+    function fmtDuration(hrs) {
+      if (hrs == null || isNaN(hrs)) return '—';
+      const h = Math.floor(Math.abs(hrs));
+      const m = Math.round((Math.abs(hrs) - h) * 60);
+      return `${h}h ${m.toString().padStart(2, '0')}m`;
+    }
+
+    function zoneBadge(zone) {
+      return `<span class="zone-badge zone-${zone}">${ZONE_LABELS[zone]}</span>`;
+    }
+
+    function driftCls(drift) {
+      if (drift > 0.05)  return 'drift-pos';
+      if (drift < -0.05) return 'drift-neg';
+      return 'drift-zero';
+    }
+
+    // ── Rendering ─────────────────────────────────────────────────────────────
+
+    function renderHistory(log) {
+      const tbody = document.getElementById('history-body');
+      if (!log.length) {
+        tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state">No entries yet. Log your first sleep above.</div></td></tr>';
+        return;
+      }
+      const sl = sorted(log);
+      const driftRows = computeDriftRows(sl);
+      const driftMap = {};
+      for (const r of driftRows) driftMap[r.entryId] = r;
+
+      // Show newest first
+      tbody.innerHTML = [...sl].reverse().map(e => {
+        const sleep    = parseDt(e.sleepDate, e.sleepTime);
+        const wake     = parseDt(e.wakeDate,  e.wakeTime);
+        const duration = (wake - sleep) / 3600000;
+        const dr       = driftMap[e.id];
+        return `<tr>
+          <td>${fmtDt(sleep)}</td>
+          <td>${fmtDt(wake)}</td>
+          <td>${fmtDuration(duration)}</td>
+          <td class="${dr ? driftCls(dr.drift) : ''}">${dr ? fmtDrift(dr.drift) : '—'}</td>
+          <td>${dr ? zoneBadge(dr.zone) : '—'}</td>
+          <td><div class="table-actions">
+            <button class="action-btn action-edit" onclick="startEdit('${e.id}')">edit</button>
+            <button class="action-btn action-del" onclick="deleteEntry('${e.id}')">del</button>
+          </div></td>
+        </tr>`;
+      }).join('');
+    }
+
+    function renderCycle(log) {
+      const sl        = sorted(log);
+      const driftRows = computeDriftRows(sl);
+      const zoneStats = computeZoneStats(driftRows);
+      const last      = sl[sl.length - 1] || null;
+      const progress  = last ? computeCycleProgress(driftRows, last, zoneStats) : null;
+
+      const ring      = document.getElementById('cycle-ring');
+      const pctText   = document.getElementById('cycle-pct-text');
+      const eAccum    = document.getElementById('stat-accumulated');
+      const eTotal    = document.getElementById('stat-total-drift');
+      const eDaysRem  = document.getElementById('stat-days-remaining');
+      const eDaysTrack = document.getElementById('stat-days-tracked');
+
+      if (!progress) {
+        ring.style.setProperty('--pct', 0);
+        pctText.textContent = '0%';
+        [eAccum, eTotal, eDaysRem, eDaysTrack].forEach(el => el.textContent = '—');
+        return;
+      }
+
+      ring.style.setProperty('--pct', progress.progressPct.toFixed(2));
+      pctText.textContent  = `${Math.round(progress.progressPct)}%`;
+      eAccum.textContent   = fmtDuration(progress.accumulated);
+      eTotal.textContent   = fmtDrift(progress.totalDrift);
+      eDaysRem.textContent = progress.estimatedDays != null
+        ? `~${progress.estimatedDays} days` : 'N/A';
+
+      if (sl.length >= 2) {
+        const first = parseDt(sl[0].sleepDate, sl[0].sleepTime);
+        const lst   = parseDt(sl[sl.length - 1].sleepDate, sl[sl.length - 1].sleepTime);
+        const days  = Math.round((lst - first) / (24 * 3600000));
+        eDaysTrack.textContent = `${days}d span · ${sl.length} entries`;
+      } else {
+        eDaysTrack.textContent = `${sl.length} entry`;
+      }
+    }
+
+    function renderZones(log) {
+      const sl        = sorted(log);
+      const driftRows = computeDriftRows(sl);
+      const stats     = computeZoneStats(driftRows);
+      document.getElementById('zones-body').innerHTML = ZONES.map(zone => {
+        const s = stats[zone];
+        const confHtml = s.lowConfidence
+          ? `<span class="warn-icon">⚠</span> <span style="color:rgba(200,214,248,0.4);font-size:0.78rem">low (${s.count} pts)</span>`
+          : `<span style="color:#86efac;font-size:0.78rem">✓ ok (${s.count} pts)</span>`;
+        return `<tr class="${s.lowConfidence ? 'low-conf-row' : ''}">
+          <td>${zoneBadge(zone)}</td>
+          <td class="${driftCls(s.avgDrift)}">${fmtDrift(s.avgDrift)}/day</td>
+          <td>${fmtDuration(s.avgDuration)}</td>
+          <td>${s.count}</td>
+          <td>${confHtml}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    function renderPredictions(log, days) {
+      const sl   = sorted(log);
+      const tbody = document.getElementById('predictions-body');
+      if (!sl.length) {
+        tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state">Log at least one entry to generate predictions.</div></td></tr>';
+        return;
+      }
+      const driftRows = computeDriftRows(sl);
+      const zoneStats = computeZoneStats(driftRows);
+      const preds     = predictForward(sl[sl.length - 1], days, zoneStats);
+      tbody.innerHTML = preds.map(p => {
+        const warn = p.lowConfidence
+          ? `<span class="warn-icon" title="Low data in this zone (< 3 samples)"> ⚠</span>` : '';
+        return `<tr class="${p.lowConfidence ? 'low-conf-row' : ''}">
+          <td>+${p.day}</td>
+          <td>${fmtDt(p.sleep)}</td>
+          <td>${fmtDt(p.wake)}</td>
+          <td class="${driftCls(p.drift)}">${fmtDrift(p.drift)}${warn}</td>
+          <td>${zoneBadge(p.zone)}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    function renderAll() {
+      const log  = loadLog();
+      const days = Math.min(parseInt(document.getElementById('predict-days').value) || 7, 30);
+      renderHistory(log);
+      renderCycle(log);
+      renderZones(log);
+      renderPredictions(log, days);
+    }
+
+    // ── Form logic ────────────────────────────────────────────────────────────
+
+    function todayStr() {
+      const t  = new Date();
+      const mm = (t.getMonth() + 1).toString().padStart(2, '0');
+      const dd = t.getDate().toString().padStart(2, '0');
+      return `${t.getFullYear()}-${mm}-${dd}`;
+    }
+
+    function prefillDates() {
+      const today = todayStr();
+      document.getElementById('sleep-date').value = today;
+      document.getElementById('wake-date').value  = today;
+    }
+
+    // If wake time is before sleep time on same date, advance wake date by 1.
+    function autoAdvanceWake() {
+      const sd = document.getElementById('sleep-date').value;
+      const st = document.getElementById('sleep-time').value;
+      const wd = document.getElementById('wake-date').value;
+      const wt = document.getElementById('wake-time').value;
+      if (sd && st && wd && wt && wd === sd && wt < st) {
+        const next = new Date(`${sd}T${st}:00`);
+        next.setDate(next.getDate() + 1);
+        const mm = (next.getMonth() + 1).toString().padStart(2, '0');
+        const dd = next.getDate().toString().padStart(2, '0');
+        document.getElementById('wake-date').value = `${next.getFullYear()}-${mm}-${dd}`;
+      }
+    }
+
+    document.getElementById('sleep-date').addEventListener('change', function () {
+      document.getElementById('wake-date').value = this.value;
+    });
+    document.getElementById('wake-time').addEventListener('change', autoAdvanceWake);
+
+    document.getElementById('log-btn').addEventListener('click', function () {
+      const sd = document.getElementById('sleep-date').value;
+      const st = document.getElementById('sleep-time').value;
+      const wd = document.getElementById('wake-date').value;
+      const wt = document.getElementById('wake-time').value;
+      if (!sd || !st || !wd || !wt) { alert('Please fill in all four fields.'); return; }
+      const sleep = parseDt(sd, st);
+      const wake  = parseDt(wd, wt);
+      if (wake <= sleep) { alert('Wake time must be after sleep onset.'); return; }
+
+      const log = loadLog();
+      if (editingId) {
+        const idx = log.findIndex(e => e.id === editingId);
+        if (idx !== -1) log[idx] = { ...log[idx], sleepDate: sd, sleepTime: st, wakeDate: wd, wakeTime: wt };
+        cancelEdit();
+      } else {
+        log.push({ id: `${Date.now()}.${Math.random().toString(36).slice(2)}`, sleepDate: sd, sleepTime: st, wakeDate: wd, wakeTime: wt });
+      }
+      saveLog(log);
+      renderAll();
+    });
+
+    document.getElementById('cancel-edit-btn').addEventListener('click', cancelEdit);
+
+    function cancelEdit() {
+      editingId = null;
+      document.getElementById('log-btn').textContent = 'Log Entry';
+      document.getElementById('cancel-edit-btn').style.display = 'none';
+      document.getElementById('edit-indicator').classList.remove('visible');
+      document.getElementById('sleep-time').value = '';
+      document.getElementById('wake-time').value  = '';
+      prefillDates();
+    }
+
+    function startEdit(id) {
+      const entry = loadLog().find(e => e.id === id);
+      if (!entry) return;
+      editingId = id;
+      document.getElementById('sleep-date').value = entry.sleepDate;
+      document.getElementById('sleep-time').value = entry.sleepTime;
+      document.getElementById('wake-date').value  = entry.wakeDate;
+      document.getElementById('wake-time').value  = entry.wakeTime;
+      document.getElementById('log-btn').textContent = 'Update Entry';
+      document.getElementById('cancel-edit-btn').style.display = 'inline-block';
+      document.getElementById('edit-indicator').classList.add('visible');
+      document.getElementById('log-form-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function deleteEntry(id) {
+      if (!confirm('Delete this entry?')) return;
+      const log = loadLog().filter(e => e.id !== id);
+      saveLog(log);
+      if (editingId === id) cancelEdit();
+      renderAll();
+    }
+
+    document.getElementById('predict-btn').addEventListener('click', function () {
+      const days = Math.min(parseInt(document.getElementById('predict-days').value) || 7, 30);
+      renderPredictions(loadLog(), days);
+    });
+
+    // ── Export / Import / Reset ───────────────────────────────────────────────
+
+    document.getElementById('export-btn').addEventListener('click', function () {
+      const data = { n24Log: loadLog(), exportedAt: new Date().toISOString() };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href     = url;
+      a.download = `n24-log-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('import-btn').addEventListener('click', function () {
+      document.getElementById('import-file').click();
+    });
+
+    document.getElementById('import-file').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (ev) {
+        try {
+          const parsed = JSON.parse(ev.target.result);
+          const log = Array.isArray(parsed) ? parsed : (parsed.n24Log || null);
+          if (!Array.isArray(log)) throw new Error('Unrecognised format.');
+          if (!confirm(`Import ${log.length} entries? This replaces your current log.`)) return;
+          saveLog(log);
+          renderAll();
+        } catch (err) { alert('Import failed: ' + err.message); }
+      };
+      reader.readAsText(file);
+      this.value = '';
+    });
+
+    document.getElementById('reset-btn').addEventListener('click', function () {
+      if (!confirm('Delete ALL entries? This cannot be undone.')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      renderAll();
+    });
+
+    // ── Init ──────────────────────────────────────────────────────────────────
+
+    prefillDates();
+    renderAll();
+  </script>
+</body>
+</html>

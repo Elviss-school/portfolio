@@ -215,6 +215,20 @@
       color: var(--vine);
     }
 
+    .book.night-owl {
+      background: linear-gradient(135deg, #0a0d1a 0%, #1a2035 50%, #0a0d1a 100%);
+    }
+    .book.night-owl::after {
+      background: linear-gradient(to top, #0a0d1a 20%, transparent 100%);
+    }
+    .book.night-owl h3 { color: #6e8efb; }
+    .book.night-owl .tag {
+      background: rgba(110,142,251,0.1);
+      color: #c8d6f8;
+      border-color: rgba(110,142,251,0.2);
+    }
+    .book.night-owl .book-number { color: rgba(110,142,251,0.3); }
+
     @media (max-width: 600px) {
       .social-links {
         flex-direction: column;
@@ -296,9 +310,18 @@
           </a>
         </div>
 
-        <!-- Template for adding more -->
-        <div class="add-volume">
-          <span>+ more coming...</span>
+        <!-- Night Owl: N24 Tracker -->
+        <div class="book night-owl">
+          <a href="projects/n24.html">
+            <h3>N24 Tracker</h3>
+            <p>Sleep cycle drift log &amp; predictions</p>
+            <div class="tags">
+              <span class="tag">Health</span>
+              <span class="tag">N24</span>
+              <span class="tag">Sleep</span>
+            </div>
+            <span class="book-number">04</span>
+          </a>
         </div>
       </div>
 
